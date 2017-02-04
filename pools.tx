@@ -1,0 +1,67 @@
+Pls:
+    rules+=Rule
+;
+
+Rule:
+    ('salience' salience=INT)?
+    loop=Loop
+    'rule'
+    '"'
+    name=RuleName
+    '"'
+    'when'
+    lhs=LHS
+    'then'
+    rhs=RHS
+    'end'
+;
+
+Loop:
+    'no-loop' | 'lock-on-active' | ''
+;
+
+RuleName:
+   /[\w\-_& ]+/
+;
+
+LHS:
+  conditions+=Condition
+;
+
+Condition:
+    (variable=Variable ':')?
+    factClass=FactClass
+    '(' evaluations=Evaluations? ')'
+;
+
+Variable:
+    /\$[A-Za-z][A-Za-z0-9_]*/
+;
+
+FactClass:
+    /[A-Za-z][A-Za-z0-9_]*/
+;
+
+Evaluations:
+   firstEval=Evaluation
+   couples*=Couple
+;
+
+Couple:
+    operator=Operator
+    evaluation=Evaluation
+;
+
+Operator:
+    ',' | 'and' | 'or'
+;
+
+Evaluation:
+    /\/\/.*$/
+;
+
+RHS:
+  /\/\/.*$/
+;
+
+

@@ -1,0 +1,50 @@
+
+    digraph xtext {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+2247025397656 -> 2247025396984 [label="rules:0" arrowtail=diamond dir=both]
+2247025396984 -> 2247025396760 [label="lhs" arrowtail=diamond dir=both]
+2247025396760 -> 2247025424816 [label="conditions:0" arrowtail=diamond dir=both]
+2247025424816 -> 2247025425040 [label="evaluations" arrowtail=diamond dir=both]
+2247025425040[label="{:Evaluations|+firstEval:str='//balance \< 100'\lcouples:list=[]\l}"]
+2247025424816[label="{:Condition|+variable:str='$account'\l+factClass:str='Account'\l}"]
+2247025396760[label="{:LHS|}"]
+2247025396984[label="{studentWithLowAccountBalance:Rule|+salience:int=10\l+loop:str='lock-on-active'\l+rhs:str='//$account.balance = 10000000'\l}"]
+2247025397656 -> 2247025395080 [label="rules:1" arrowtail=diamond dir=both]
+2247025395080 -> 2247025424760 [label="lhs" arrowtail=diamond dir=both]
+2247025424760 -> 2247025425152 [label="conditions:0" arrowtail=diamond dir=both]
+2247025425152 -> 2247025425208 [label="evaluations" arrowtail=diamond dir=both]
+2247025425208 -> 2247025425432 [label="couples:0" arrowtail=diamond dir=both]
+2247025425432[label="{:Couple|+operator:str=','\l+evaluation:str='//type == bleja'\l}"]
+2247025425208[label="{:Evaluations|+firstEval:str='//balance \< 100'\l}"]
+2247025425152[label="{:Condition|+variable:str='$account'\l+factClass:str='Account'\l}"]
+2247025424760 -> 2247025425264 [label="conditions:1" arrowtail=diamond dir=both]
+2247025425264 -> 2247025425376 [label="evaluations" arrowtail=diamond dir=both]
+2247025425376 -> 2247025425600 [label="couples:0" arrowtail=diamond dir=both]
+2247025425600[label="{:Couple|+operator:str='or'\l+evaluation:str='//afasf = asd as'\l}"]
+2247025425376 -> 2247025425712 [label="couples:1" arrowtail=diamond dir=both]
+2247025425712[label="{:Couple|+operator:str='and'\l+evaluation:str='//asdasfa asda'\l}"]
+2247025425376[label="{:Evaluations|+firstEval:str='//accounts \< $account'\l}"]
+2247025425264[label="{:Condition|+variable:str='$customer'\l+factClass:str='Customer'\l}"]
+2247025424760[label="{:LHS|}"]
+2247025395080[label="{accountBalanceAtLeast:Rule|+salience:int=0\l+loop:str='no-loop'\l+rhs:str='//print $account.balance;'\l}"]
+2247025397656 -> 2247025424984 [label="rules:2" arrowtail=diamond dir=both]
+2247025424984 -> 2247025424928 [label="lhs" arrowtail=diamond dir=both]
+2247025424928 -> 2247025425544 [label="conditions:0" arrowtail=diamond dir=both]
+2247025425544 -> 2247025425768 [label="evaluations" arrowtail=diamond dir=both]
+2247025425768[label="{:Evaluations|+firstEval:str='//balance \< 100'\lcouples:list=[]\l}"]
+2247025425544[label="{:Condition|+variable:str='$account'\l+factClass:str='Account'\l}"]
+2247025424928[label="{:LHS|}"]
+2247025424984[label="{accLeast:Rule|+salience:int=0\l+loop:str=''\l+rhs:str='//print $account.balance;'\l}"]
+2247025397656[label="{:Pls|}"]
+
+}

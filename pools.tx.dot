@@ -1,0 +1,66 @@
+
+    digraph xtext {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+2247021805880 -> 2247021801160[arrowtail=diamond, dir=both, headlabel="rules 1..*"]
+2247021805880[ label="{Pls|}"]
+
+2247021801160 -> 2247021809656[arrowtail=diamond, dir=both, headlabel="lhs "]
+2247021801160[ label="{Rule|+salience:INT\l+loop:Loop\l+name:RuleName\l+rhs:RHS\l}"]
+
+2247021807768[ label="{Loop|no-loop\|lock-on-active\|}"]
+
+2247021808712[ label="{RuleName|[\\w\\-_& ]+}"]
+
+2247021809656 -> 2247021781336[arrowtail=diamond, dir=both, headlabel="conditions 1..*"]
+2247021809656[ label="{LHS|}"]
+
+2247021781336 -> 2247021811544[arrowtail=diamond, dir=both, headlabel="evaluations "]
+2247021781336[ label="{Condition|+variable:Variable\l+factClass:FactClass\l}"]
+
+2247021790776[ label="{Variable|\\$[A-Za-z][A-Za-z0-9_]*}"]
+
+2247021810600[ label="{FactClass|[A-Za-z][A-Za-z0-9_]*}"]
+
+2247021811544 -> 2247021813432[arrowtail=diamond, dir=both, headlabel="couples 0..*"]
+2247021811544[ label="{Evaluations|+firstEval:Evaluation\l}"]
+
+2247021813432[ label="{Couple|+operator:Operator\l+evaluation:Evaluation\l}"]
+
+2247021782280[ label="{Operator|,\|and\|or}"]
+
+2247021787000[ label="{Evaluation|\\/\\/.*$}"]
+
+2247021814376[ label="{RHS|\\/\\/.*$}"]
+
+2247021800216[ label="{ID|}"]
+
+2247021802104[ label="{STRING|}"]
+
+2247021793608[ label="{BOOL|}"]
+
+2247021791720[ label="{INT|}"]
+
+2247021783224[ label="{FLOAT|}"]
+
+2247021803992[ label="{NUMBER|}"]
+2247021803992 -> 2247021783224 [dir=back]
+2247021803992 -> 2247021791720 [dir=back]
+
+2247021789832[ label="{BASETYPE|}"]
+2247021789832 -> 2247021803992 [dir=back]
+2247021789832 -> 2247021793608 [dir=back]
+2247021789832 -> 2247021800216 [dir=back]
+2247021789832 -> 2247021802104 [dir=back]
+
+
+}
