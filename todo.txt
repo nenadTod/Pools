@@ -1,0 +1,7 @@
+- prosiriti evaluation (varijablama npr)
+- RHS
+- from, contains, not/'!'
+- globalne varijable
+
+- rel operand ne hvata field? (pogledati metamodel.png)
+- rel operand hvata sve brojeve kao float ako se stavi NUMBER ili FLOAT | INT, a ne radi kada se stavi INT | FLOAT

@@ -48,16 +48,30 @@ Evaluations:
 ;
 
 Couple:
-    operator=Operator
+    logOperator=LogOperator
     evaluation=Evaluation
 ;
 
-Operator:
-    ',' | 'and' | 'or'
+LogOperator:
+   ',' | 'and' | 'or'
 ;
 
 Evaluation:
-    /\/\/.*$/
+    operand1=RelOperand
+    relOperator=RelOperator
+    operand2=RelOperand
+;
+
+RelOperator:
+    '<=' | '>=' | '>' | '<' | '==' | '!='
+;
+
+RelOperand:
+    Field  | NUMBER | BOOL | STRING
+;
+
+Field:
+    /[A-Za-z][A-Za-z0-9_]*/
 ;
 
 RHS:
