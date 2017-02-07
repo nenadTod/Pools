@@ -1,5 +1,11 @@
 Pls:
+    globals*=Global
     rules+=Rule
+;
+
+Global:
+    'global'
+    variable=Variable
 ;
 
 Rule:
@@ -63,19 +69,21 @@ Evaluation:
 ;
 
 RelOperator:
-    '<=' | '>=' | '>' | '<' | '==' | '!='
+    '<=' | '>=' | '>' | '<' | '==' | '!=' | 'contains'
+;
+
+Field:
+    field=/[A-Za-z][A-Za-z0-9_]*/
 ;
 
 RelOperand:
     Field  | NUMBER | BOOL | STRING
 ;
 
-Field:
-    /[A-Za-z][A-Za-z0-9_]*/
+RHS:
+  code=STRING
 ;
 
-RHS:
-  /\/\/.*$/
-;
+
 
 
