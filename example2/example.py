@@ -12,6 +12,8 @@ session.add_fact(acc)
 session.add_fact(cus)
 session.add_fact(acc2)
 
+#session.remove_fact(acc2)
+
 res = session.find_facts_by_class("Account")
 
 print(res)
