@@ -81,7 +81,7 @@ RelOperand:
 ;
 
 RHS:
-  code=STRING
+  /(.*\n)*?(?=end)/
 ;
 
 
