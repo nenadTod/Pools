@@ -11,71 +11,70 @@
     edge[dir=black,arrowtail=empty]
 
 
-2463632911752 -> 2463632906088[arrowtail=diamond, dir=both, headlabel="globals 0..*"]
-2463632911752 -> 2463632923080[arrowtail=diamond, dir=both, headlabel="rules 1..*"]
-2463632911752[ label="{Pls|}"]
+41175392[ label="{FactClass|[A-Za-z][A-Za-z0-9_]*}"]
 
-2463632906088[ label="{Global|+variable:Variable\l}"]
+41106144 -> 41119456[arrowtail=diamond, dir=both, headlabel="globals 0..*"]
+41106144 -> 41126480[arrowtail=diamond, dir=both, headlabel="rules 1..*"]
+41106144[ label="{Pls|}"]
 
-2463632923080 -> 2463632924968[arrowtail=diamond, dir=both, headlabel="lhs "]
-2463632923080 -> 2463632908920[arrowtail=diamond, dir=both, headlabel="rhs "]
-2463632923080[ label="{Rule|+salience:INT\l+loop:Loop\l+name:RuleName\l}"]
+41224208[ label="{RHS|(.*\\n)*\?(\?=end)}"]
 
-2463632910808[ label="{Loop|no-loop\|lock-on-active\|}"]
+41206000[ label="{RelOperator|\<=\|\>=\|\>\|\<\|==\|!=\|contains}"]
 
-2463632924024[ label="{RuleName|[\\w\\-_& ]+}"]
+41185440 -> 41197840[arrowtail=diamond, dir=both, headlabel="evaluation "]
+41185440[ label="{Couple|+logOperator:LogOperator\l}"]
 
-2463632924968 -> 2463632907976[arrowtail=diamond, dir=both, headlabel="conditions 1..*"]
-2463632924968[ label="{LHS|}"]
+41119456[ label="{Global|+variable:Variable\l}"]
 
-2463632907976 -> 2463632925912[arrowtail=diamond, dir=both, headlabel="evaluations "]
-2463632907976[ label="{Condition|+variable:Variable\l+factClass:FactClass\l}"]
+41126480 -> 41156144[arrowtail=diamond, dir=both, headlabel="lhs "]
+41126480[ label="{Rule|+salience:INT\l+loop:Loop\l+name:RuleName\l+rhs:RHS\l}"]
 
-2463632915528[ label="{Variable|\\$[A-Za-z][A-Za-z0-9_]*}"]
+41214944[ label="{Field|+field:STRING\l}"]
 
-2463632912696[ label="{FactClass|[A-Za-z][A-Za-z0-9_]*}"]
+41156144 -> 41161168[arrowtail=diamond, dir=both, headlabel="conditions 1..*"]
+41156144[ label="{LHS|}"]
 
-2463632925912 -> 2463632916472[arrowtail=diamond, dir=both, headlabel="firstEval "]
-2463632925912 -> 2463632927800[arrowtail=diamond, dir=both, headlabel="couples 0..*"]
-2463632925912[ label="{Evaluations|}"]
+41161168 -> 41178848[arrowtail=diamond, dir=both, headlabel="evaluations "]
+41161168[ label="{Condition|+variable:Variable\l+factClass:FactClass\l}"]
 
-2463632927800 -> 2463632916472[arrowtail=diamond, dir=both, headlabel="evaluation "]
-2463632927800[ label="{Couple|+logOperator:LogOperator\l}"]
+41151248[ label="{RuleName|[\\w\\-_& ]+}"]
 
-2463632902312[ label="{LogOperator|,\|and\|or}"]
+41171936[ label="{Variable|\\$[A-Za-z][A-Za-z0-9_]*}"]
 
-2463632916472 -> 2463632917416[arrowtail=diamond, dir=both, headlabel="operand1 "]
-2463632916472 -> 2463632917416[arrowtail=diamond, dir=both, headlabel="operand2 "]
-2463632916472[ label="{Evaluation|+relOperator:RelOperator\l}"]
+41178848 -> 41197840[arrowtail=diamond, dir=both, headlabel="firstEval "]
+41178848 -> 41185440[arrowtail=diamond, dir=both, headlabel="couples 0..*"]
+41178848[ label="{Evaluations|}"]
 
-2463632907032[ label="{RelOperator|\<=\|\>=\|\>\|\<\|==\|!=\|contains}"]
+41220752[ label="{*RelOperand|NUMBER\|BOOL\|STRING}"]
+41220752 -> 41214944 [dir=back]
 
-2463632921192[ label="{Field|+field:STRING\l}"]
+41197840 -> 41220752[arrowtail=diamond, dir=both, headlabel="operand1 "]
+41197840 -> 41220752[arrowtail=diamond, dir=both, headlabel="operand2 "]
+41197840[ label="{Evaluation|+relOperator:RelOperator\l}"]
 
-2463632917416[ label="{*RelOperand|NUMBER\|BOOL\|STRING}"]
-2463632917416 -> 2463632921192 [dir=back]
+41192032[ label="{LogOperator|,\|and\|or}"]
 
-2463632908920[ label="{RHS|+code:STRING\l}"]
+41145440[ label="{Loop|no-loop\|lock-on-active\|}"]
 
-2463632793672[ label="{ID|}"]
+39285568[ label="{STRING|}"]
 
-2463632794616[ label="{STRING|}"]
+40930064[ label="{BASETYPE|}"]
+40930064 -> 40926608 [dir=back]
+40930064 -> 39075424 [dir=back]
+40930064 -> 39331344 [dir=back]
+40930064 -> 39285568 [dir=back]
 
-2463632790840[ label="{BOOL|}"]
+40446288[ label="{INT|}"]
 
-2463632914584[ label="{INT|}"]
+40448960[ label="{FLOAT|}"]
 
-2463632919304[ label="{FLOAT|}"]
+40926608[ label="{NUMBER|}"]
+40926608 -> 40448960 [dir=back]
+40926608 -> 40446288 [dir=back]
 
-2463632932520[ label="{NUMBER|}"]
-2463632932520 -> 2463632919304 [dir=back]
-2463632932520 -> 2463632914584 [dir=back]
+39075424[ label="{BOOL|}"]
 
-2463632933464[ label="{BASETYPE|}"]
-2463632933464 -> 2463632932520 [dir=back]
-2463632933464 -> 2463632790840 [dir=back]
-2463632933464 -> 2463632793672 [dir=back]
-2463632933464 -> 2463632794616 [dir=back]
+39331344[ label="{ID|}"]
 
 
 }

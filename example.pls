@@ -11,7 +11,7 @@ rule "studentWithLowAccountBalance"
 end
 
 no-loop
-rule "accountBalanceAtLeast"
+rule "accountBalanceAtLeastt"
     when
       $account : Account( balance < 100, type == 4)
       $customer : Customer( accounts != 20 or name == "John" and 3 <= 4)
