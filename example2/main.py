@@ -1,5 +1,6 @@
 from os.path import join, dirname
 
+from engineSC.checker import Checker
 from engineSC.session import Session
 from example2.account import Account
 from example2.customer import Customer
@@ -10,8 +11,8 @@ from textx.export import model_export, metamodel_export
 
 root_folder = join(dirname(__file__), "..")
 
-pools_mm = metamodel_from_file(join(root_folder, "pools.tx"))
-pools_model = pools_mm.model_from_file(join(root_folder, "example.pls"))
+pools_mm = metamodel_from_file(join(root_folder, "engineSC/pools.tx"))
+pools_model = pools_mm.model_from_file(join(root_folder, "example2/example.pls"))
 
 
 metamodel_export(pools_mm, join(root_folder, "pools.tx.dot"))
@@ -35,8 +36,14 @@ session.add_fact(acc2)
 
 session.remove_fact(acc2)
 
+session.set_pools_file(join(root_folder, "example2/example.pls"))
+
 res = session.find_facts_by_class("Account")
 
 print(res)
+
+ch = Checker()
+
+ch.check_LHS(pools_model.rules[1].lhs)
 
 #dot -Tpng example.pls.dot -o model.png
