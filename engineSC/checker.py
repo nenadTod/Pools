@@ -11,7 +11,7 @@ class Checker:
             if not self.check_condition(condition):
                 return False
 
-        return True
+        return True #, varijable
 
     def check_condition(self, cond):
         print('f')

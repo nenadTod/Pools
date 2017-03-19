@@ -1,10 +1,11 @@
 from textx.metamodel import metamodel_from_file
-
+import os
 
 class Session:
 
     def __init__(self):
-        self.pools_metamodel = metamodel_from_file("pools.tx")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        self.pools_metamodel = metamodel_from_file(dir_path + "/pools.tx")
         self.facts = {}
         self.counter = 0
         self.pools_file = ""
