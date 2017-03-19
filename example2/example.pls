@@ -14,7 +14,7 @@ no-loop
 rule "accountBalanceAtLeast"
     when
       $account : Account( balance < 100, type == 4)
-      $customer : Customer( accounts != 20 or name == "John" and 3 <= 4)
+      $customer : Customer( (accounts (>= 20 and <= 40) or (!="mahab" and !="Kokoda") and surname < 30) and mahab == 40)
     then
       print $account.balance
       $account.balance = 176

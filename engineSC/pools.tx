@@ -49,23 +49,57 @@ FactClass:
 ;
 
 Evaluations:
-   firstEval=Evaluation
-   couples*=Couple
+   firstEvaluationChoice=EvaluationChoice
+   subsequentEC*=SubsequentEC
 ;
 
-Couple:
+SubsequentEC:
     logOperator=LogOperator
-    evaluation=Evaluation
+    evaluationChoice=EvaluationChoice
+;
+
+EvaluationChoice:
+    EvaluationGrouped | Evaluation
+;
+
+EvaluationGrouped:
+    '('
+        evaluations=Evaluations
+    ')'
+;
+
+Evaluation:
+    operand=RelOperand
+    continuation=Continuations
+;
+
+Continuations:
+    firstContinuationChoice=ContinuationChoice
+    subsequentCC*=SubsequentCC
+;
+
+SubsequentCC:
+    logOperator=LogOperator
+    continuationChoice=ContinuationChoice
+;
+
+ContinuationChoice:
+    ContinuationGrouped | Continuation
+;
+
+ContinuationGrouped:
+    '('
+        continuations=Continuations
+    ')'
+;
+
+Continuation:
+    relOperator=RelOperator
+    operand=RelOperand
 ;
 
 LogOperator:
    ',' | 'and' | 'or'
-;
-
-Evaluation:
-    operand1=RelOperand
-    relOperator=RelOperator
-    operand2=RelOperand
 ;
 
 RelOperator:
@@ -83,7 +117,3 @@ RelOperand:
 RHS:
   /(.*\n)*?(?=end)/
 ;
-
-
-
-
