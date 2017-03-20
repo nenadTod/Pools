@@ -54,7 +54,7 @@ print(acc1.accBalance)
 acc2.deposit(200.0)
 acc2.withdrawal(100.0)
 
-ch = Checker()
+# ch = Checker()
 
 session.run()
 

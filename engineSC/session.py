@@ -43,7 +43,9 @@ class Session:
     def set_pools_file(self, location):
         self.pools_file = location
         self.rule_model = self.pools_metamodel.model_from_file(location)
-        # TODO: kreirati executable_rule od svakog rule-a
+
+        for small_rule in self.rule_model.rules:
+            self.rules.append(ExecutableRule(small_rule, self))
 
     def all_facts(self):
         for k, v in self.facts.items():
