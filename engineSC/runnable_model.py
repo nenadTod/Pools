@@ -1,4 +1,4 @@
-from session import Session
+from engineSC.session import Session
 
 
 class ExecutableModel:

@@ -36,6 +36,7 @@ LHS:
 
 Condition:
     (variable=Variable ':')?
+    not=UnaOperator?
     factClass=FactClass
     '(' evaluations=Evaluations? ')'
 ;
@@ -106,6 +107,10 @@ RelOperator:
     '<=' | '>=' | '>' | '<' | '==' | '!=' | 'contains'
 ;
 
+UnaOperator:
+    /[a-z]*/
+;
+
 Field:
     field=/[A-Za-z][A-Za-z0-9_]*/
 ;
@@ -113,6 +118,7 @@ Field:
 RelOperand:
     Field  | NUMBER | BOOL | STRING
 ;
+
 
 RHS:
   /(.*\n)*?(?=end)/

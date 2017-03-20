@@ -23,27 +23,41 @@ model_export(pools_model, join(root_folder, "example.pls.dot"))
 
 
 # session playground
+cus1 = Customer("Jovan", "Jovanovic")
+cus2 = Customer("Marko", "Markovic")
+cus3 = Customer("Milan", "Milovanovic")
+cus4 = Customer("Petar", "Petrovic")
+acc1 = Account(cus1, "001", 600.0)
+acc2 = Account(cus2, "002", 300.0)
+acc3 = Account(cus3, "003")
 
-acc = Account("Jovan", "Jovanovic", "12312")
-acc2 = Account("Marko", "Markovic", "123123")
-cus = Customer("Petar", "Petrovic")
 
 session = Session()
-
-session.add_fact(acc)
-session.add_fact(cus)
+session.add_fact(cus1)
+session.add_fact(cus2)
+session.add_fact(cus3)
+session.add_fact(cus4)
+session.add_fact(acc1)
 session.add_fact(acc2)
+session.add_fact(acc3)
 
-session.remove_fact(acc2)
+#session.remove_fact(acc2)
 
 session.set_pools_file(join(root_folder, "example2/example.pls"))
 
 res = session.find_facts_by_class("Account")
 
 print(res)
+print(acc1.accBalance)
+#acc1.acc_balance(0)
+print(acc1.accBalance)
+acc2.deposit(200.0)
+acc2.withdrawal(100.0)
 
 ch = Checker()
 
 ch.check_LHS(pools_model.rules[1].lhs)
 
 #dot -Tpng example.pls.dot -o model.png
+
+#session.all_facts()
