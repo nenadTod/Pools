@@ -1,6 +1,10 @@
 from textx.metamodel import metamodel_from_file
 import os
 
+from engineSC.checker import Checker
+from engineSC.executable_rule import ExecutableRule
+
+
 class Session:
 
     def __init__(self):
@@ -10,6 +14,7 @@ class Session:
         self.counter = 0
         self.pools_file = ""
         self.rule_model = None
+        self.rules = []
 
     def find_facts_by_class(self, class_name):
         if class_name in self.facts:
@@ -41,4 +46,8 @@ class Session:
         self.rule_model = self.pools_metamodel.model_from_file(location)
 
     def run(self):
+        rule = ExecutableRule(self.rule_model.rules[1], self)
+        rule.check_fact_classes_used()
         print("Execute session!!!")
+        # ch = Checker()
+        # ch.check_LHS(self.rule_model.rules[1].lhs)

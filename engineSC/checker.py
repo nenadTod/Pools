@@ -4,7 +4,7 @@
 class Checker:
 
     def __init__(self):
-        print("init")
+        variables = {}
 
     def check_LHS(self, lhs):
         for condition in lhs.conditions:
@@ -13,5 +13,8 @@ class Checker:
 
         return True #, varijable
 
-    def check_condition(self, cond):
-        print('f')
+    def check_condition(self, condition):
+        # if hasattr(condition, 'variable'):
+        first = condition.evaluations.firstEvaluationChoice
+        print("check")
+

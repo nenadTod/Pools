@@ -11,70 +11,94 @@
     edge[dir=black,arrowtail=empty]
 
 
-2293923685640 -> 2293923689416[arrowtail=diamond, dir=both, headlabel="globals 0..*"]
-2293923685640 -> 2293923690360[arrowtail=diamond, dir=both, headlabel="rules 1..*"]
-2293923685640[ label="{Pls|}"]
+2468137510936 -> 2468137509992[arrowtail=diamond, dir=both, headlabel="globals 0..*"]
+2468137510936 -> 2468137529816[arrowtail=diamond, dir=both, headlabel="rules 1..*"]
+2468137510936[ label="{Pls|}"]
 
-2293923689416[ label="{Global|+variable:Variable\l}"]
+2468137509992[ label="{Global|+variable:Variable\l}"]
 
-2293923690360 -> 2293923682808[arrowtail=diamond, dir=both, headlabel="lhs "]
-2293923690360[ label="{Rule|+salience:INT\l+loop:Loop\l+name:RuleName\l+rhs:RHS\l}"]
+2468137529816 -> 2468137516600[arrowtail=diamond, dir=both, headlabel="lhs "]
+2468137529816[ label="{Rule|+salience:INT\l+loop:Loop\l+name:RuleName\l+rhs:RHS\l}"]
 
-2293923687528[ label="{Loop|no-loop\|lock-on-active\|}"]
+2468137520376[ label="{Loop|no-loop\|lock-on-active\|}"]
 
-2293923681864[ label="{RuleName|[\\w\\-_& ]+}"]
+2468137521320[ label="{RuleName|[\\w\\-_& ]+}"]
 
-2293923682808 -> 2293923683752[arrowtail=diamond, dir=both, headlabel="conditions 1..*"]
-2293923682808[ label="{LHS|}"]
+2468137516600 -> 2468137518488[arrowtail=diamond, dir=both, headlabel="conditions 1..*"]
+2468137516600[ label="{LHS|}"]
 
-2293923683752 -> 2293923688472[arrowtail=diamond, dir=both, headlabel="evaluations "]
-2293923683752[ label="{Condition|+variable:Variable\l+factClass:FactClass\l}"]
+2468137518488 -> 2468137515656[arrowtail=diamond, dir=both, headlabel="evaluations "]
+2468137518488[ label="{Condition|+variable:Variable\l+factClass:FactClass\l}"]
 
-2293923686584[ label="{Variable|\\$[A-Za-z][A-Za-z0-9_]*}"]
+2468137522264[ label="{Variable|\\$[A-Za-z][A-Za-z0-9_]*}"]
 
-2293923684696[ label="{FactClass|[A-Za-z][A-Za-z0-9_]*}"]
+2468137526040[ label="{FactClass|[A-Za-z][A-Za-z0-9_]*}"]
 
-2293923688472 -> 2293923583688[arrowtail=diamond, dir=both, headlabel="firstEval "]
-2293923688472 -> 2293923571416[arrowtail=diamond, dir=both, headlabel="couples 0..*"]
-2293923688472[ label="{Evaluations|}"]
+2468137515656 -> 2468137517544[arrowtail=diamond, dir=both, headlabel="firstEvaluationChoice "]
+2468137515656 -> 2468137508104[arrowtail=diamond, dir=both, headlabel="subsequentEC 0..*"]
+2468137515656[ label="{Evaluations|}"]
 
-2293923571416 -> 2293923583688[arrowtail=diamond, dir=both, headlabel="evaluation "]
-2293923571416[ label="{Couple|+logOperator:LogOperator\l}"]
+2468137508104 -> 2468137517544[arrowtail=diamond, dir=both, headlabel="evaluationChoice "]
+2468137508104[ label="{SubsequentEC|+logOperator:LogOperator\l}"]
 
-2293923566696[ label="{LogOperator|,\|and\|or}"]
+2468137517544[ label="{*EvaluationChoice|}"]
+2468137517544 -> 2468137502440 [dir=back]
+2468137517544 -> 2468137507160 [dir=back]
 
-2293923583688 -> 2293923573304[arrowtail=diamond, dir=both, headlabel="operand1 "]
-2293923583688 -> 2293923573304[arrowtail=diamond, dir=both, headlabel="operand2 "]
-2293923583688[ label="{Evaluation|+relOperator:RelOperator\l}"]
+2468137502440 -> 2468137515656[arrowtail=diamond, dir=both, headlabel="evaluations "]
+2468137502440[ label="{EvaluationGrouped|}"]
 
-2293923572360[ label="{RelOperator|\<=\|\>=\|\>\|\<\|==\|!=\|contains}"]
+2468137507160 -> 2468137509048[arrowtail=diamond, dir=both, headlabel="operand "]
+2468137507160 -> 2468137523208[arrowtail=diamond, dir=both, headlabel="continuation "]
+2468137507160[ label="{Evaluation|}"]
 
-2293923561976[ label="{Field|+field:STRING\l}"]
+2468137523208 -> 2468137500552[arrowtail=diamond, dir=both, headlabel="firstContinuationChoice "]
+2468137523208 -> 2468137505272[arrowtail=diamond, dir=both, headlabel="subsequentCC 0..*"]
+2468137523208[ label="{Continuations|}"]
 
-2293923573304[ label="{*RelOperand|NUMBER\|BOOL\|STRING}"]
-2293923573304 -> 2293923561976 [dir=back]
+2468137505272 -> 2468137500552[arrowtail=diamond, dir=both, headlabel="continuationChoice "]
+2468137505272[ label="{SubsequentCC|+logOperator:LogOperator\l}"]
 
-2293923564808[ label="{RHS|(.*\\n)*\?(\?=end)}"]
+2468137500552[ label="{*ContinuationChoice|}"]
+2468137500552 -> 2468137506216 [dir=back]
+2468137500552 -> 2468137526984 [dir=back]
 
-2293923673368[ label="{ID|}"]
+2468137506216 -> 2468137523208[arrowtail=diamond, dir=both, headlabel="continuations "]
+2468137506216[ label="{ContinuationGrouped|}"]
 
-2293923675256[ label="{STRING|}"]
+2468137526984 -> 2468137509048[arrowtail=diamond, dir=both, headlabel="operand "]
+2468137526984[ label="{Continuation|+relOperator:RelOperator\l}"]
 
-2293923676200[ label="{BOOL|}"]
+2468137519432[ label="{LogOperator|,\|and\|or}"]
 
-2293923678088[ label="{INT|}"]
+2468137524152[ label="{RelOperator|\<=\|\>=\|\>\|\<\|==\|!=\|contains}"]
 
-2293923677144[ label="{FLOAT|}"]
+2468137527928[ label="{Field|+field:STRING\l}"]
 
-2293923679976[ label="{NUMBER|}"]
-2293923679976 -> 2293923677144 [dir=back]
-2293923679976 -> 2293923678088 [dir=back]
+2468137509048[ label="{*RelOperand|NUMBER\|BOOL\|STRING}"]
+2468137509048 -> 2468137527928 [dir=back]
 
-2293923680920[ label="{BASETYPE|}"]
-2293923680920 -> 2293923679976 [dir=back]
-2293923680920 -> 2293923676200 [dir=back]
-2293923680920 -> 2293923673368 [dir=back]
-2293923680920 -> 2293923675256 [dir=back]
+2468137530760[ label="{RHS|(.*\\n)*\?(\?=end)}"]
+
+2468137498664[ label="{ID|}"]
+
+2468137493000[ label="{STRING|}"]
+
+2468137493944[ label="{BOOL|}"]
+
+2468137494888[ label="{INT|}"]
+
+2468137495832[ label="{FLOAT|}"]
+
+2468137496776[ label="{NUMBER|}"]
+2468137496776 -> 2468137495832 [dir=back]
+2468137496776 -> 2468137494888 [dir=back]
+
+2468137525096[ label="{BASETYPE|}"]
+2468137525096 -> 2468137496776 [dir=back]
+2468137525096 -> 2468137493944 [dir=back]
+2468137525096 -> 2468137498664 [dir=back]
+2468137525096 -> 2468137493000 [dir=back]
 
 
 }

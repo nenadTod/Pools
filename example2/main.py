@@ -44,6 +44,6 @@ print(res)
 
 ch = Checker()
 
-ch.check_LHS(pools_model.rules[1].lhs)
+session.run()
 
 #dot -Tpng example.pls.dot -o model.png
