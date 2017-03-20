@@ -1,4 +1,4 @@
-import itertools
+import itertools as it
 
 class ExecutableRule:
 
@@ -17,13 +17,16 @@ class ExecutableRule:
 
     def try_execute(self):
         self.take_facts() #ako dodje do promene, najbolje da ih refreshuje pre izvrsavanja
-        # TODO: pozvati evaluaciju za sve moguce kombinacije ulaznih factova i onda izvrsiti sto treba (execute())
-        # res = (dict(zip(self.facts, x)) for x in itertools.product(*self.facts.values()))
-        print('ff')
 
-        # options = {"number": [1, 2, 3], "color": ["orange", "blue"]}
+        var_names = sorted(self.facts)
+        combinations = [dict(zip(var_names, prod)) for prod in it.product(*(self.facts[varName] for varName in var_names))]
 
-    def evaluate(self, facts):
+        for combination in combinations:
+            # TODO: pozvati evaluaciju i onda izvrsiti execute ako je true
+            print(combination)
+            # evaluate(combination)  if (eval) the execute
+
+    def evaluate(self):
         # TODO: provera validnosti (true/false) i dodela vredosti varijablama!
 
         print("eval")
