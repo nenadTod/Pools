@@ -36,7 +36,6 @@ LHS:
 
 Condition:
     (variable=Variable ':')?
-    not=UnaOperator?
     factClass=FactClass
     '(' evaluations=Evaluations? ')'
 ;
@@ -64,6 +63,7 @@ EvaluationChoice:
 ;
 
 EvaluationGrouped:
+    not?='not'
     '('
         evaluations=Evaluations
     ')'
@@ -89,6 +89,7 @@ ContinuationChoice:
 ;
 
 ContinuationGrouped:
+    not?='not'
     '('
         continuations=Continuations
     ')'
@@ -105,10 +106,6 @@ LogOperator:
 
 RelOperator:
     '<=' | '>=' | '>' | '<' | '==' | '!=' | 'contains'
-;
-
-UnaOperator:
-    /[a-z]*/
 ;
 
 Field:
