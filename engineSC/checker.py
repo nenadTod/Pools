@@ -1,5 +1,5 @@
 
-# ciljevi: provera validnosti (true/false) i dodela vredosti varijablama!
+
 
 class Checker:
 
