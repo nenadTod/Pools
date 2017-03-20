@@ -5,7 +5,7 @@ salience 10
 lock-on-active
 rule "studentWithLowAccountBalance"
     when
-       $account : not Account( balance < 100.46 )
+       $account : Account( balance < 100.46 )
     then
       $account.accBalance = 1000
       $account.withdrawal(300.0)

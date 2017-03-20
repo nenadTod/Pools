@@ -42,6 +42,7 @@ session.add_fact(acc2)
 session.add_fact(acc3)
 
 #session.remove_fact(acc2)
+session.mock_variables(acc1, acc2)
 
 session.set_pools_file(join(root_folder, "example2/example.pls"))
 

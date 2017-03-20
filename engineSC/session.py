@@ -51,6 +51,12 @@ class Session:
         for k, v in self.facts.items():
             print(k, v)
 
+    #mock za varijable, posle cemo prosledjivati one koje trebaju
+    def mock_variables(self, *var):
+        for i in var:
+            self.variables.append(i)
+
+
     def run(self):
         rule = ExecutableRule(self.rule_model.rules[1], self)
         print("Execute session!!!")
