@@ -1,9 +1,8 @@
 from textx.metamodel import metamodel_from_file
 import os
 
-from engineSC.checker import Checker
+import itertools as it
 from engineSC.executable_rule import ExecutableRule
-
 
 class Session:
 
@@ -49,13 +48,7 @@ class Session:
         combinations = [dict(zip(var_names, prod)) for prod in
                         it.product(*(self.facts[varName] for varName in var_names))]
 
-        for combination in combinations:
-            # TODO: pozvati evaluaciju i onda izvrsiti execute ako je true
-            print(combination)
-            # evaluate(combination)  if (eval) the execute
-
-        return
-
+        return combinations
 
     def set_pools_file(self, location):
         self.pools_file = location
@@ -73,11 +66,26 @@ class Session:
         for i in var:
             self.variables.append(i)
 
-
+    # logika i odluke o tome koji se rule izvrsava
     def run(self):
-        rule = ExecutableRule(self.rule_model.rules[1], self)
-        print("Execute session!!!")
-        rule.try_execute()
-        # Da bi se izvrsio neki rule, poziva se try_execute. On sam tamo proverava da li se zadovoljavaju uslovi i izvrsava ako treba
-        # ch = Checker()
-        # ch.check_LHS(self.rule_model.rules[1].lhs)
+        # if nesto se promenilo i nema no loop, repeat. else next rule
+        for rule in self.rules:
+            while True:
+                changed = self.run_rule(rule)
+                if not changed or rule.no_loop:
+                    break
+
+    def run_rule(self, exec_rule):
+        combinations = self.cartesian_product(exec_rule.fact_classes)
+
+        for combination in combinations:
+            if exec_rule.evaluate(combination):
+                print("execute")
+                # TODO: return true ili false u zavisnosti od toga da li je bilo promena
+                # exec_rule.execute ()  i dobija odgovor da li je neki fact promenjen
+                # ako nije no loop i ima promena - prekidaj odmah i vracaj true
+                # ako je no loop i ima promena - ne prekidaj
+                # ako nema promena - ne prekidaj
+
+        # returns false if no rule was excecuted
+        return False

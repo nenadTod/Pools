@@ -2,6 +2,7 @@ class ExecutableRule:
 
     def __init__(self, rule, session): #checker, executor):
         self.priority = rule.salience
+        self.no_loop = rule.loop == "no-loop"
         self.rule = rule
         self.session = session
         self.fact_classes = []
@@ -30,15 +31,14 @@ class ExecutableRule:
 
         rhs = ExecutableRuleCode(self.execution_code, self.session.variables)
 
-    def evaluate(self):
-        # TODO: provera validnosti (true/false) i dodela vredosti varijablama!
+    # TODO: vraca true ili false i podstavlja varijable. Ne poziva execute!!!
+    def evaluate(self, facts):
 
         print("eval")
 
     def execute(self):
         # TODO: execute
         print("exec")
-
 
 
 class ExecutableRuleCode:
