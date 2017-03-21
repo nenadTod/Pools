@@ -1,36 +1,34 @@
-import itertools as it
-
 class ExecutableRule:
 
     def __init__(self, rule, session): #checker, executor):
         self.priority = rule.salience
         self.rule = rule
         self.session = session
-        self.facts = {}
-        self.take_facts()
+        self.fact_classes = []
         self.execution_code = self.take_execution_code()
+        self.build_from_rule_model()
         # self.checker = checker
         # self.executor = executor
 
-    def take_facts(self):
+    def get_fact_classes(self):
+        return self.fact_classes
+
+    # TODO posle kreiranja, dodati ostale naredbe (poput checkera...)
+    def build_from_rule_model(self):
+        self.populate_fact_classes()
+
+        return
+
+    def populate_fact_classes(self):
         for condition in self.rule.lhs.conditions:
-            self.facts[condition.factClass] = self.session.find_facts_by_class(condition.factClass)
+            self.fact_classes.append(condition.factClass)
 
     def take_execution_code(self):
         return self.rule.rhs
 
-
     def try_execute(self):
-        self.take_facts() #ako dodje do promene, najbolje da ih refreshuje pre izvrsavanja
+
         rhs = ExecutableRuleCode(self.execution_code, self.session.variables)
-
-        var_names = sorted(self.facts)
-        combinations = [dict(zip(var_names, prod)) for prod in it.product(*(self.facts[varName] for varName in var_names))]
-
-        for combination in combinations:
-            # TODO: pozvati evaluaciju i onda izvrsiti execute ako je true
-            print(combination)
-            # evaluate(combination)  if (eval) the execute
 
     def evaluate(self):
         # TODO: provera validnosti (true/false) i dodela vredosti varijablama!

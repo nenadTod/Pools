@@ -40,6 +40,23 @@ class Session:
             if fact in self.facts[fact_class_name]:
                 self.facts[fact_class_name].remove(fact)
 
+    def cartesian_product(self, fact_classes):
+        facts_for_exru = {}
+        for fact_class in fact_classes:
+            facts_for_exru[fact_class] = self.facts[fact_class]
+
+        var_names = sorted(facts_for_exru)
+        combinations = [dict(zip(var_names, prod)) for prod in
+                        it.product(*(self.facts[varName] for varName in var_names))]
+
+        for combination in combinations:
+            # TODO: pozvati evaluaciju i onda izvrsiti execute ako je true
+            print(combination)
+            # evaluate(combination)  if (eval) the execute
+
+        return
+
+
     def set_pools_file(self, location):
         self.pools_file = location
         self.rule_model = self.pools_metamodel.model_from_file(location)

@@ -21,7 +21,7 @@ model_export(pools_model, join(root_folder, "example.pls.dot"))
 #interp = InterpreterSC(pools_model)
 #runnable_m = interp.interprete()
 
-
+'''
 # session playground
 cus1 = Customer("Jovan", "Jovanovic")
 cus2 = Customer("Marko", "Markovic")
@@ -62,3 +62,5 @@ session.run()
 #dot -Tpng example.pls.dot -o model.png
 
 #session.all_facts()
+
+'''

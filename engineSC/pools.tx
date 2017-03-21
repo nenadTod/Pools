@@ -63,7 +63,7 @@ EvaluationChoice:
 ;
 
 EvaluationGrouped:
-    not?='not'
+    negation?='not'
     '('
         evaluations=Evaluations
     ')'
@@ -71,7 +71,7 @@ EvaluationGrouped:
 
 Evaluation:
     operand=RelOperand
-    continuation=Continuations
+    continuations=Continuations
 ;
 
 Continuations:
@@ -89,7 +89,7 @@ ContinuationChoice:
 ;
 
 ContinuationGrouped:
-    not?='not'
+    negation?='not'
     '('
         continuations=Continuations
     ')'
