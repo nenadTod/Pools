@@ -41,7 +41,7 @@ Condition:
 ;
 
 Variable:
-    /\$[A-Za-z][A-Za-z0-9_]*/
+    variable=/\$[A-Za-z][A-Za-z0-9_]*/
 ;
 
 FactClass:
@@ -113,9 +113,8 @@ Field:
 ;
 
 RelOperand:
-    Field  | NUMBER | BOOL | STRING
+    Field  | Variable | NUMBER | BOOL | STRING
 ;
-
 
 RHS:
   /(.*\n)*?(?=end)/

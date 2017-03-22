@@ -31,9 +31,10 @@ class Evaluation(EvaluationChoice):
 
     def __init__(self):
         super().__init__()
-        self.operand = ""
         # self.creates_variable = False
         # self.variable_name = ""
+        self.operand_type = -1
+        self.operand = None
         self.continuations_ch = []
 
     def add_continuation_ch(self, continuation_ch):
