@@ -4,6 +4,7 @@ import os
 import itertools as it
 from engineSC.executable_rule import ExecutableRule
 
+
 class Session:
 
     def __init__(self):
@@ -14,6 +15,7 @@ class Session:
         self.pools_file = ""
         self.rule_model = None
         self.rules = []
+        self.globals = {}
         # TODO: izvuci globalne varijable
 
     def find_facts_by_class(self, class_name):
@@ -39,6 +41,14 @@ class Session:
             if fact in self.facts[fact_class_name]:
                 self.facts[fact_class_name].remove(fact)
 
+    def set_global(self, name, value):
+        name = '$' + name
+        if name in self.globals.keys():
+            self.globals[name] = value
+            return True
+        else:
+           return False
+
     def cartesian_product(self, fact_classes):
         facts_for_exru = {}
         for fact_class in fact_classes:
@@ -56,6 +66,9 @@ class Session:
 
         for small_rule in self.rule_model.rules:
             self.rules.append(ExecutableRule(small_rule, self))
+
+        for global_var in self.rule_model.globals:
+            self.globals[global_var.variable.variable] = None
 
     def all_facts(self):
         for k, v in self.facts.items():
@@ -79,6 +92,7 @@ class Session:
         combinations = self.cartesian_product(exec_rule.fact_classes)
 
         for combination in combinations:
+            #proslediti globalne varijable?
             if exec_rule.evaluate(combination):
                 print("execute")
                 # TODO: return true ili false u zavisnosti od toga da li je bilo promena
