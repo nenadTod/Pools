@@ -41,7 +41,10 @@ session.add_fact(acc2)
 session.add_fact(acc3)
 
 session.remove_fact(acc2)
-# session.mock_variables(acc1, acc2)
+
+#ideja: sta ako umjesto da prosledjujemo objekte, samo prosledimo imena objekata, jer nam samo to i treba da bi ih pokrenuli?
+session.mock_variables('acc1', 'acc2')
+#session.mock_variables(acc1, acc2)
 
 session.set_pools_file(join(root_folder, "example2/example.pls"))
 

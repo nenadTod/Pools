@@ -7,7 +7,7 @@ rule "studentWithLowAccountBalance"
     when
        $account : Account( balance < 100.46 )
     then
-      $account.accBalance = 1000
+      $account.acc_balance = 1000
       $account.withdrawal(300.0)
 end
 

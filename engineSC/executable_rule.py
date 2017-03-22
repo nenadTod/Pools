@@ -8,6 +8,7 @@ class ExecutableRule:
         self.fact_classes = []
         self.execution_code = self.take_execution_code()
         self.build_from_rule_model()
+        self.try_execute()
         # self.checker = checker
         # self.executor = executor
 
@@ -28,46 +29,52 @@ class ExecutableRule:
         return self.rule.rhs
 
     def try_execute(self):
-
         rhs = ExecutableRuleCode(self.execution_code, self.session.variables)
 
     # TODO: vraca true ili false i podstavlja varijable. Ne poziva execute!!!
     def evaluate(self, facts):
-
-        print("eval")
+        samo_da_ne_pukne_jer_smara_ispis=5
+        #print("eval")
 
     def execute(self):
         # TODO: execute
         print("exec")
 
 
+# ideja: primice raw string sa rhs i niz varijabli bez obzira da li su lokalne ili globalne
+# varijable su zapravo niz objekata: prvo provjeriti kog su tipa (cust ili acc)
+# hmm sta ako se u rhs ne koristi varijabla koja je u nizu (jer je recimo globalna?) hoce li exec izbaciti gresku?
 class ExecutableRuleCode:
 
     def __init__(self, code, variables):
         self.raw_code = code
         self.variables = variables
         #self.print()
-        self.get_variables_from_code()
+        self.replace_variables()
 
     def print(self):
         print(str(self.raw_code))
         for i in self.variables:
             print(i)
 
-    def get_variables_from_code(self):
-        code1 = str(self.raw_code)
-        code1 = code1.replace("\r\n", "")
-        code1=code1.strip()
-        print(code1)
-        code1.replace('$account', 'Account')
-        print(code1)
-        code = self.raw_code.split()
-        temp = []
-        #print(code[0])
-        for i in code:
-            i.strip()
-            if i.startswith('$'):
-                temp.append(((i.split('.')[0])[1:]).title())
+    def replace_variables(self):
+        code = str(self.raw_code)
+        code = code.replace("\r\n", "")
+        #code=code.strip()
+        #print(code)
+        #code = code.replace('$account', 'Account')
+        print(code)
+        print(len(self.variables))
+        for i in self.variables:
+            self.execute_function(code, i)
             #print(i)
 
-        #print(temp)
+    #ideja: za pocetak samo izvrsi kod za svaku promenljivu
+    #problem: ako samo zamjenis string sa stringom - gdje je objekat?
+    #         ako zamjenis sa objektom, ne moze, izbacuje gresku....
+    def execute_function(self, code, var):
+        print(var)
+        #exec(code) in var
+        code1 = code.replace('$account', 'acc1')
+        #exec(code1)                             --- puca
+        #print(var.acc_balance)

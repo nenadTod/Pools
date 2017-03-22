@@ -16,6 +16,7 @@ class Session:
         self.rule_model = None
         self.rules = []
         self.globals = {}
+        self.variables = []
         # TODO: izvuci globalne varijable
 
     def find_facts_by_class(self, class_name):
