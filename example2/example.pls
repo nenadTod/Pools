@@ -13,8 +13,8 @@ end
 no-loop
 rule "accountBalanceAtLeast"
     when
-      $account : Account( balance < 600, account_number == "003")
-      $customer : Customer( not (first_name (== "Marko" or == "Jovan") or not (!="mahab" and !="Kokoda") and $customerBalance > 30) or last_name == $customerBalance)
+      $account : Account( dkwk contains 30, account_number == "003")
+      $customer : Customer( not (last_name ( contains "y" or == "Jovanovic") or not (!="mahab" and !="Kokoda") and $customerBalance > 30) or first_name == $customerBalance)
     then
       print ($account.balance)
       $account.balance = 176

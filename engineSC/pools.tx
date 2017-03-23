@@ -113,7 +113,7 @@ Field:
 ;
 
 RelOperand:
-    Field  | Variable | NUMBER | BOOL | STRING
+    BOOL | Field  | Variable | NUMBER | STRING
 ;
 
 RHS:

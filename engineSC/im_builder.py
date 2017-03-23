@@ -133,7 +133,7 @@ class IM_Builder:
 
             else:
                 ret_val.operand_type = enums.OperandType.LITERAL
-                ret_val.operand = str(cont_choice.operand)
+                ret_val.operand = cont_choice.operand
 
         else:
             ret_val = im.ContinuationGrouped()
