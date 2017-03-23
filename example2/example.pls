@@ -5,7 +5,7 @@ salience 10
 lock-on-active
 rule "studentWithLowAccountBalance"
     when
-       $account : Account( balance < 100.46 )
+       $account : Account( acc_balance < 100.46 )
     then
       $account.accBalance = 1000
       $account.withdrawal(300.0)
@@ -14,8 +14,8 @@ end
 no-loop
 rule "accountBalanceAtLeast"
     when
-      Account( balance < 100, type == 4)
-      $customer : Customer( not (accounts (>= 20 and <= 40) or not (!="mahab" and !="Kokoda") and $customerBalance < 30) and mahab == $customerBalance)
+      Account( acc_balance < 500, accountNumber == "003")
+      $customer : Customer( not (first_name (== "Marko" or == "Jovan") or not (!="mahab" and !="Kokoda") and $customerBalance < 30) and last_name == $customerBalance)
     then
       print $account.balance
       $account.accBalance = 176
@@ -25,7 +25,7 @@ end
 
 rule "accLeast"
     when
-      $account : Account( balance < 100)
+      $account : Account( acc_balance < 100)
     then
       print $account.accBalance
 end

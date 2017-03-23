@@ -1,6 +1,6 @@
 from os.path import join, dirname
 
-from engineSC.checker import Checker
+from engineSC.im_builder import IM_Builder
 from engineSC.session import Session
 from example2.account import Account
 from example2.customer import Customer
