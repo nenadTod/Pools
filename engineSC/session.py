@@ -99,7 +99,7 @@ class Session:
                 exec_rule.execute(self.globals, variables)
                 print(True, variables)
             else:
-                print("checker false")
+                print(False)
 
         # returns false if no rule was excecuted
         return False
