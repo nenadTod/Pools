@@ -1,6 +1,5 @@
 import collections
 
-
 class Checker:
 
     def __init__(self, facts, globals):
