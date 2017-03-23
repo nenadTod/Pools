@@ -1,3 +1,7 @@
+from example2.account import Account
+from example2.customer import Customer
+
+
 class ExecutableRule:
 
     def __init__(self, rule, session): #checker, executor):
@@ -6,11 +10,9 @@ class ExecutableRule:
         self.rule = rule
         self.session = session
         self.fact_classes = []
-        self.execution_code = self.take_execution_code()
         self.build_from_rule_model()
-        self.try_execute()
+        self.locals = {} # TODO: LHS podesava lokalne variajble tu!!!
         # self.checker = checker
-        # self.executor = executor
 
     def get_fact_classes(self):
         return self.fact_classes
@@ -25,56 +27,47 @@ class ExecutableRule:
         for condition in self.rule.lhs.conditions:
             self.fact_classes.append(condition.factClass)
 
-    def take_execution_code(self):
-        return self.rule.rhs
-
-    def try_execute(self):
-        rhs = ExecutableRuleCode(self.execution_code, self.session.variables)
-
     # TODO: vraca true ili false i podstavlja varijable. Ne poziva execute!!!
     def evaluate(self, facts):
         samo_da_ne_pukne_jer_smara_ispis=5
         #print("eval")
+        return True
 
-    def execute(self):
-        # TODO: execute
-        print("exec")
+    def execute(self, globals):
+        # mock mock mock mock mock
+        self.locals["$customer"] = Customer("Petar", "Njegos")
+        self.locals["$account"] = Account(self.locals["$customer"], 3012)
+        # mock mock mock mock mock
+
+        rule_code = ExecutableRuleCode(self.rule.rhs, self.locals, globals)
+        rule_code.preprocess_code()
 
 
-# ideja: primice raw string sa rhs i niz varijabli bez obzira da li su lokalne ili globalne
-# varijable su zapravo niz objekata: prvo provjeriti kog su tipa (cust ili acc)
-# hmm sta ako se u rhs ne koristi varijabla koja je u nizu (jer je recimo globalna?) hoce li exec izbaciti gresku?
+# dobija factove, globalne i lokalne varijable (i kod?)
+# vraca true/false u zavisnosti od toga da li je doslod o promene factova
 class ExecutableRuleCode:
 
-    def __init__(self, code, variables):
+    def __init__(self, code, locals, globals):
         self.raw_code = code
-        self.variables = variables
-        #self.print()
-        self.replace_variables()
+        self.locals = locals
+        self.globals = globals
 
-    def print(self):
-        print(str(self.raw_code))
-        for i in self.variables:
-            print(i)
+    def preprocess_code(self):
 
-    def replace_variables(self):
-        code = str(self.raw_code)
-        code = code.replace("\r\n", "")
-        #code=code.strip()
-        #print(code)
-        #code = code.replace('$account', 'Account')
-        print(code)
-        print(len(self.variables))
-        for i in self.variables:
-            self.execute_function(code, i)
-            #print(i)
+        for key, value in self.locals.items():
+            self.raw_code = self.raw_code.replace(key, "self.locals[\"" + key + "\"]")
 
-    #ideja: za pocetak samo izvrsi kod za svaku promenljivu
-    #problem: ako samo zamjenis string sa stringom - gdje je objekat?
-    #         ako zamjenis sa objektom, ne moze, izbacuje gresku....
-    def execute_function(self, code, var):
-        print(var)
-        #exec(code) in var
-        code1 = code.replace('$account', 'acc1')
-        #exec(code1)                             --- puca
-        #print(var.acc_balance)
+        for key, value in self.globals.items():
+            self.raw_code = self.raw_code.replace(key, "self.globals[\"" + key + "\"]")
+
+        # sredjivanje problema sa code indent zbog exec()
+        while "\r\n " in self.raw_code:
+            self.raw_code = self.raw_code.replace("\r\n ", "\r\n")
+
+        exec(self.raw_code)
+
+        print('RHS executed')
+
+        # TODO: srediti za istoimene globalne i lokalne varijable
+        # TODO: vratiti true/false u zavisnosti od promena factova ( u sustini, ako se promenilo nesto u locals)
+        # TODO: lagano moze biti jedna metoda u nadklasi, umesto cela klasa
