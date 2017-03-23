@@ -1,10 +1,10 @@
-global $accountService
+global $account
 global $customerBalance
 
 salience 10
 rule "studentWithLowAccountBalance"
     when
-       $account : Account( balance < 100.46 )
+       $account : Account( balance < 500.46 )
     then
       $account.balance = 1000
       $account.withdraw(300.0)
@@ -24,7 +24,7 @@ end
 
 rule "accLeast"
     when
-      $account : Account( balance < 100)
+      $account : Account( balance > 100)
     then
       print ($account.balance)
 end
