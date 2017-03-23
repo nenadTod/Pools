@@ -18,7 +18,6 @@ class Session:
         self.rule_model = None
         self.rules = []
         self.globals = {}
-        # TODO: izvuci globalne varijable
 
     def find_facts_by_class(self, class_name):
         if class_name in self.facts:
@@ -76,11 +75,6 @@ class Session:
         for k, v in self.facts.items():
             print(k, v)
 
-    #mock za varijable, posle cemo prosledjivati one koje trebaju
-    def mock_variables(self, *var):
-        for i in var:
-            self.variables.append(i)
-
     # logika i odluke o tome koji se rule izvrsava
     def run(self):
         # if nesto se promenilo i nema no loop, repeat. else next rule
@@ -98,12 +92,12 @@ class Session:
             # checker = Checker(combination, self.globals)
             # if checker.evaluateLHS(im):
             if exec_rule.evaluate(combination):
-                print("execute")
                 # TODO: return true ili false u zavisnosti od toga da li je bilo promena
                 # exec_rule.execute ()  i dobija odgovor da li je neki fact promenjen
                 # ako nije no loop i ima promena - prekidaj odmah i vracaj true
                 # ako je no loop i ima promena - ne prekidaj
                 # ako nema promena - ne prekidaj
+                exec_rule.execute(self.globals)
             else:
                 print("checker false")
 

@@ -1,3 +1,7 @@
+from example2.account import Account
+from example2.customer import Customer
+
+
 class ExecutableRule:
 
     def __init__(self, rule, session): #checker, executor):
@@ -6,10 +10,9 @@ class ExecutableRule:
         self.rule = rule
         self.session = session
         self.fact_classes = []
-        self.execution_code = self.take_execution_code()
         self.build_from_rule_model()
+        self.locals = {} # TODO: LHS podesava lokalne variajble tu!!!
         # self.checker = checker
-        # self.executor = executor
 
     def get_fact_classes(self):
         return self.fact_classes
@@ -24,50 +27,47 @@ class ExecutableRule:
         for condition in self.rule.lhs.conditions:
             self.fact_classes.append(condition.factClass)
 
-    def take_execution_code(self):
-        return self.rule.rhs
-
-    def try_execute(self):
-
-        rhs = ExecutableRuleCode(self.execution_code, self.session.variables)
-
     # TODO: vraca true ili false i podstavlja varijable. Ne poziva execute!!!
     def evaluate(self, facts):
+        samo_da_ne_pukne_jer_smara_ispis=5
+        #print("eval")
+        return True
 
-        print("eval")
+    def execute(self, globals):
+        # mock mock mock mock mock
+        self.locals["$customer"] = Customer("Petar", "Njegos")
+        self.locals["$account"] = Account(self.locals["$customer"], 3012)
+        # mock mock mock mock mock
 
-    def execute(self):
-        # TODO: execute
-        print("exec")
+        rule_code = ExecutableRuleCode(self.rule.rhs, self.locals, globals)
+        rule_code.preprocess_code()
 
 
+# dobija factove, globalne i lokalne varijable (i kod?)
+# vraca true/false u zavisnosti od toga da li je doslod o promene factova
 class ExecutableRuleCode:
 
-    def __init__(self, code, variables):
+    def __init__(self, code, locals, globals):
         self.raw_code = code
-        self.variables = variables
-        #self.print()
-        self.get_variables_from_code()
+        self.locals = locals
+        self.globals = globals
 
-    def print(self):
-        print(str(self.raw_code))
-        for i in self.variables:
-            print(i)
+    def preprocess_code(self):
 
-    def get_variables_from_code(self):
-        code1 = str(self.raw_code)
-        code1 = code1.replace("\r\n", "")
-        code1=code1.strip()
-        print(code1)
-        code1.replace('$account', 'Account')
-        print(code1)
-        code = self.raw_code.split()
-        temp = []
-        #print(code[0])
-        for i in code:
-            i.strip()
-            if i.startswith('$'):
-                temp.append(((i.split('.')[0])[1:]).title())
-            #print(i)
+        for key, value in self.locals.items():
+            self.raw_code = self.raw_code.replace(key, "self.locals[\"" + key + "\"]")
 
-        #print(temp)
+        for key, value in self.globals.items():
+            self.raw_code = self.raw_code.replace(key, "self.globals[\"" + key + "\"]")
+
+        # sredjivanje problema sa code indent zbog exec()
+        while "\r\n " in self.raw_code:
+            self.raw_code = self.raw_code.replace("\r\n ", "\r\n")
+
+        exec(self.raw_code)
+
+        print('RHS executed')
+
+        # TODO: srediti za istoimene globalne i lokalne varijable
+        # TODO: vratiti true/false u zavisnosti od promena factova ( u sustini, ako se promenilo nesto u locals)
+        # TODO: lagano moze biti jedna metoda u nadklasi, umesto cela klasa

@@ -41,7 +41,9 @@ session.add_fact(acc2)
 session.add_fact(acc3)
 
 session.remove_fact(acc2)
-# session.mock_variables(acc1, acc2)
+
+# ideja: sta ako umjesto da prosledjujemo objekte, samo prosledimo imena objekata, jer nam samo to i treba da bi ih pokrenuli?
+# ideja rejected
 
 session.set_pools_file(join(root_folder, "example2/example.pls"))
 
@@ -54,5 +56,7 @@ if not session.set_global('nepostojeci', 45):
 res = session.find_facts_by_class("Account")
 
 session.run()
+
+
 
 #dot -Tpng example.pls.dot -o model.png
