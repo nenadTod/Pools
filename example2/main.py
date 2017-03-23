@@ -52,7 +52,7 @@ session.remove_fact(acc2)
 session.set_pools_file(join(root_folder, "example2/example.pls"))
 
 session.set_global('customerBalance', 300.0)
-session.set_global('account', True)
+session.set_global('someonesAccount', acc1)
 
 if not session.set_global('nepostojeci', 45):
     print("Ne postoji globalna promenljiva, pa nije podesio")

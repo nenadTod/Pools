@@ -1,6 +1,6 @@
 from example2.account import Account
 from example2.customer import Customer
-import copy
+import copy, itertools
 
 class ExecutableRule:
 
@@ -29,48 +29,54 @@ class ExecutableRule:
 
     # TODO: vraca true ili false i podstavlja varijable. Ne poziva execute!!!
     def evaluate(self, facts):
-        samo_da_ne_pukne_jer_smara_ispis=5
         #print("eval")
         return True
 
     def execute(self, globals, locals):
-        self.locals_old = locals
-        rule_code = ExecutableRuleCode(self.rule.rhs, locals, globals)
+        all = self.process_variables(globals, locals)
+        print(all)
+        rule_code = ExecutableRuleCode(self.rule.rhs, all)
         rule_code.preprocess_code()
         rule_code.execute_code()
-        rule_code.postprocess()
+        changed_something = rule_code.postprocess()
+        print(changed_something)
 
+    def process_variables(self, globals, locals):
+        for key in locals.keys() & globals.keys():
+            del globals[key]
+        z = dict(globals)
+        z.update(locals)
+        return z
 
 # dobija factove, globalne i lokalne varijable (kod je rhs, u smislu kod koji se izvrsava)
 # vraca true/false u zavisnosti od toga da li je doslo do promene factova
 class ExecutableRuleCode:
 
-    def __init__(self, code, locals, globals):
+    def __init__(self, code, all):
         self.raw_code = code
-        self.locals = locals
-        self.globals = globals
-        self.locals_old = copy.deepcopy(locals)
-        #self.execute_code()
+        self.all = all
+        #self.globals = globals
+        self.locals_old = copy.deepcopy(all)
+
 
     def preprocess_code(self):
         #for key, value in self.locals.items():
             #print('local', ' :', key, ' - ', value)
         #for key, value in self.globals.items():
             #print('global', ' :', key, ' - ', value)
-        # da li postoji lokalna promenljiva ista kao globalna? ako postoji, izbaci globalnu jer je gazi lokalna
-        for key in self.locals.keys() & self.globals.keys():
-            del self.globals[key]
 
+        # da li postoji lokalna promenljiva ista kao globalna? ako postoji, izbaci globalnu jer je gazi lokalna
+        #for key in self.locals.keys() & self.globals.keys():
+            #del self.globals[key]
+        #print(self.globals)
         #for key, value in self.globals.items():
             #print('global', ' :', key, ' - ', value)
+        for key, value in self.all.items():
+            self.raw_code = self.raw_code.replace(key, "self.all[\"" + key + "\"]")
+
+        #for key, value in self.globals.items():
+            #self.raw_code = self.raw_code.replace(key, "self.globals[\"" + key + "\"]")
         print(self.raw_code)
-        for key, value in self.locals.items():
-            self.raw_code = self.raw_code.replace(key, "self.locals[\"" + key + "\"]")
-
-
-        for key, value in self.globals.items():
-            self.raw_code = self.raw_code.replace(key, "self.globals[\"" + key + "\"]")
-
         # sredjivanje problema sa code indent zbog exec()
         while "\r\n " in self.raw_code:
             self.raw_code = self.raw_code.replace("\r\n ", "\r\n")
@@ -88,15 +94,16 @@ class ExecutableRuleCode:
             #print('local_old', ' :', key, ' - ', value)
         #for key, value in self.globals_old.items():
             #print('global_old', ' :', key, ' - ', value)
-        const1 = len(self.locals)
-        print(const1)
-        isti = set(self.locals.items()) & set(self.locals_old.items())
-        const2 = len(isti)
-        print(const2)
-        print('koliko ih je istih nasao ',len(isti))
-        if const1 == const2:
-            print('Nije doslo do promjene!')
+        #const1 = len(self.locals)
+        #print(const1)
+        isti = set(self.all.items()) & set(self.locals_old.items())
+        #const2 = len(isti)
+        #print(const2)
+        #print('koliko ih je istih nasao ',len(isti))
+
+        if self.all == self.locals_old:
+            print("Nije doslo do promjene.")
+            return False
         else:
             print('Doslo je do promjene!')
-        if self.locals == self.locals_old:
-            print("samo da jos jednom vidim da li su iste")
+            return True

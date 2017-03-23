@@ -1,13 +1,14 @@
-global $account
+global $someonesAccount
 global $customerBalance
 
 salience 10
 rule "studentWithLowAccountBalance"
     when
-       $account : Account( balance < 500.46 )
+       $account : Account( balance == 600.00 )
     then
       $account.balance = 1000
       $account.withdraw(300.0)
+      $someonesAccount.withdraw(100.0)
 end
 
 no-loop
@@ -27,4 +28,5 @@ rule "accLeast"
       $account : Account( balance > 100)
     then
       print ($account.balance)
+      $someonesAccount.deposit(350.0)
 end
