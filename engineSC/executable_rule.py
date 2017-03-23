@@ -1,6 +1,6 @@
 from example2.account import Account
 from example2.customer import Customer
-
+import copy
 
 class ExecutableRule:
 
@@ -11,7 +11,7 @@ class ExecutableRule:
         self.session = session
         self.fact_classes = []
         self.build_from_rule_model()
-        self.locals = {} # TODO: LHS podesava lokalne variajble tu!!!
+        self.locals_old = {} # TODO: LHS podesava lokalne variajble tu!!!
         # self.checker = checker
 
     def get_fact_classes(self):
@@ -34,24 +34,39 @@ class ExecutableRule:
         return True
 
     def execute(self, globals, locals):
+        self.locals_old = locals
         rule_code = ExecutableRuleCode(self.rule.rhs, locals, globals)
         rule_code.preprocess_code()
         rule_code.execute_code()
+        rule_code.postprocess()
 
 
-# dobija factove, globalne i lokalne varijable (i kod?)
-# vraca true/false u zavisnosti od toga da li je doslod o promene factova
+# dobija factove, globalne i lokalne varijable (kod je rhs, u smislu kod koji se izvrsava)
+# vraca true/false u zavisnosti od toga da li je doslo do promene factova
 class ExecutableRuleCode:
 
     def __init__(self, code, locals, globals):
         self.raw_code = code
         self.locals = locals
         self.globals = globals
+        self.locals_old = copy.deepcopy(locals)
+        #self.execute_code()
 
     def preprocess_code(self):
+        #for key, value in self.locals.items():
+            #print('local', ' :', key, ' - ', value)
+        #for key, value in self.globals.items():
+            #print('global', ' :', key, ' - ', value)
+        # da li postoji lokalna promenljiva ista kao globalna? ako postoji, izbaci globalnu jer je gazi lokalna
+        for key in self.locals.keys() & self.globals.keys():
+            del self.globals[key]
 
+        #for key, value in self.globals.items():
+            #print('global', ' :', key, ' - ', value)
+        print(self.raw_code)
         for key, value in self.locals.items():
             self.raw_code = self.raw_code.replace(key, "self.locals[\"" + key + "\"]")
+
 
         for key, value in self.globals.items():
             self.raw_code = self.raw_code.replace(key, "self.globals[\"" + key + "\"]")
@@ -67,3 +82,21 @@ class ExecutableRuleCode:
 
     def execute_code(self):
         exec(self.raw_code)
+
+    def postprocess(self):
+        #for key, value in self.locals_old.items():
+            #print('local_old', ' :', key, ' - ', value)
+        #for key, value in self.globals_old.items():
+            #print('global_old', ' :', key, ' - ', value)
+        const1 = len(self.locals)
+        print(const1)
+        isti = set(self.locals.items()) & set(self.locals_old.items())
+        const2 = len(isti)
+        print(const2)
+        print('koliko ih je istih nasao ',len(isti))
+        if const1 == const2:
+            print('Nije doslo do promjene!')
+        else:
+            print('Doslo je do promjene!')
+        if self.locals == self.locals_old:
+            print("samo da jos jednom vidim da li su iste")
