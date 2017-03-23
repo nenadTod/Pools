@@ -3,16 +3,21 @@ class Checker:
     def __init__(self, facts, globals):
         self.facts = facts
         self.globals = globals
+        self.locals = dict()
 
     def evaluateLHS(self, im_model):
         lhs_evaluation = None
         for condition in im_model.instructions.conditions:
-            result = self.evaluate_condition(condition)
-            if lhs_evaluation:
+            result, fact = self.evaluate_condition(condition)
+            if condition.creates_variable and result:
+                self.locals[condition.variable_name] = fact
+            if lhs_evaluation is not None:
                 lhs_evaluation = lhs_evaluation and result
             else:
                 lhs_evaluation = result
-        return lhs_evaluation
+        if not lhs_evaluation:
+            self.locals = dict()
+        return lhs_evaluation, self.locals
 
     def evaluate_condition(self, condition):
         condition_evaluation = None
@@ -29,14 +34,16 @@ class Checker:
             elif operator == ',':
                     condition_evaluation = condition_evaluation and result
             else:
-                condition_evaluation = eval('condition_evaluation'+operator+'result')
-        return condition_evaluation
+                condition_evaluation = eval('condition_evaluation '+operator+' result')
+        return condition_evaluation, fact
 
     def evaluate_eval_ch(self, choice, fact):
         final_result = None
         if choice.__class__.__name__ == 'Evaluation':
             if choice.operand_type.name == 'FIELD':  # ako je prvi operand evaluacije field zamijeni ga sa fact.naziv_polja
                 operand = 'fact.'+choice.operand
+            elif choice.operand_type.name == 'GLOBAL':
+                operand = "self.globals['"+choice.operand+"']"
             else:
                 operand = str(choice.operand)            # u suprotnom proslijedi kao string
             for cont_ch in choice.continuations_ch:
@@ -66,6 +73,8 @@ class Checker:
         if choice.__class__.__name__ == 'Continuation':
             if choice.operand_type.name == 'FIELD': # isto kao gore samo se sad primjenjuje za drugi relacioni operand
                 operand2 = 'fact.'+choice.operand
+            elif choice.operand_type.name == 'GLOBAL':
+                operand2 = "self.globals['"+choice.operand+"']"
             else:
                 operand2 = str(choice.operand)
             eval_string = operand+" "+choice.relational_operator+" "+str(operand2)

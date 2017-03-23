@@ -15,8 +15,8 @@ no-loop
 
 rule "accountBalanceAtLeast"
     when
-      Account( acc_balance < 500, accountNumber == "003")
-      $customer : Customer( not (first_name (== "Marko" or == "Jovan") or not (!="mahab" and !="Kokoda") and $customerBalance < 30) and last_name == $customerBalance)
+      $account : Account( acc_balance < 600, account_number == "003")
+      $customer : Customer( not (first_name (== "Marko" or == "Jovan") or not (!="mahab" and !="Kokoda") and $customerBalance > 30) or last_name == $customerBalance)
     then
       print ($account.acc_balance)
       $account.acc_balance = 176

@@ -125,7 +125,7 @@ class IM_Builder:
 
             elif cont_choice.operand.__class__.__name__ == "Variable":
                 ret_val.operand_type = enums.OperandType.GLOBAL
-                ret_val.operand = cont_choice.operand.variable[1:]
+                ret_val.operand = cont_choice.operand.variable
 
             elif cont_choice.operand.__class__.__name__ == "str":
                 ret_val.operand_type = enums.OperandType.STRING
