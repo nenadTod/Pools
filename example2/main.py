@@ -1,3 +1,4 @@
+import json
 from os.path import join, dirname
 
 from engineSC.im_builder import IM_Builder
@@ -30,10 +31,12 @@ cus4 = Customer("Petar", "Petrovic")
 acc1 = Account("001", 600.0)
 acc2 = Account("002", 300.0)
 acc3 = Account("003")
+someAcc = Account("004")
 
 cus1.set_account(acc1)
 cus2.set_account(acc2)
 cus3.set_account(acc3)
+
 
 session = Session()
 session.add_fact(cus1)
@@ -52,7 +55,8 @@ session.remove_fact(acc2)
 session.set_pools_file(join(root_folder, "example2/example.pls"))
 
 session.set_global('customerBalance', 300.0)
-session.set_global('someonesAccount', acc1)
+session.set_global('account', acc3)
+session.set_global('someonesAccount', someAcc)
 
 if not session.set_global('nepostojeci', 45):
     print("Ne postoji globalna promenljiva, pa nije podesio")
