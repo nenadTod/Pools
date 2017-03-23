@@ -92,16 +92,14 @@ class Session:
             checker = Checker(combination, self.globals)
             evaluation, variables = checker.evaluateLHS(im)
             if evaluation:
-            #if exec_rule.evaluate(combination):
-                # TODO: return true ili false u zavisnosti od toga da li je bilo promena
-                # exec_rule.execute ()  i dobija odgovor da li je neki fact promenjen
+                # TODO: srediti za no-loop
                 # ako nije no loop i ima promena - prekidaj odmah i vracaj true
                 # ako je no loop i ima promena - ne prekidaj
                 # ako nema promena - ne prekidaj
-                # exec_rule.execute(self.globals)
+                exec_rule.execute(self.globals, variables)
                 print(True, variables)
             else:
-                print("checker false", variables)
+                print("checker false")
 
         # returns false if no rule was excecuted
         return False

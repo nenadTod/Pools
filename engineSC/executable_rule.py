@@ -33,14 +33,10 @@ class ExecutableRule:
         #print("eval")
         return True
 
-    def execute(self, globals):
-        # mock mock mock mock mock
-        self.locals["$customer"] = Customer("Petar", "Njegos")
-        self.locals["$account"] = Account(self.locals["$customer"], 3012)
-        # mock mock mock mock mock
-
-        rule_code = ExecutableRuleCode(self.rule.rhs, self.locals, globals)
+    def execute(self, globals, locals):
+        rule_code = ExecutableRuleCode(self.rule.rhs, locals, globals)
         rule_code.preprocess_code()
+        rule_code.execute_code()
 
 
 # dobija factove, globalne i lokalne varijable (i kod?)
@@ -64,10 +60,10 @@ class ExecutableRuleCode:
         while "\r\n " in self.raw_code:
             self.raw_code = self.raw_code.replace("\r\n ", "\r\n")
 
-        exec(self.raw_code)
-
-        print('RHS executed')
 
         # TODO: srediti za istoimene globalne i lokalne varijable
         # TODO: vratiti true/false u zavisnosti od promena factova ( u sustini, ako se promenilo nesto u locals)
         # TODO: lagano moze biti jedna metoda u nadklasi, umesto cela klasa
+
+    def execute_code(self):
+        exec(self.raw_code)
