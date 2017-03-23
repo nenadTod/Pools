@@ -14,6 +14,7 @@ class Condition:
         self.creates_variable = False
         self.variable_name = ""
         self.evaluations_ch = []
+        self.class_name =""
 
     def add_evaluation_ch(self, evaluation_ch):
         self.evaluations_ch.append(evaluation_ch)

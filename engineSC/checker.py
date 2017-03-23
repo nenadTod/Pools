@@ -1,131 +1,88 @@
-import engineSC.enums as enums
-import engineSC.instruction_model as im
-
-
 class Checker:
 
-    def __init__(self, lhs):
-        self.lhs = lhs
-        self.instructions = self.geninst_lhs(lhs)
+    def __init__(self, facts, globals):
+        self.facts = facts
+        self.globals = globals
 
-    def geninst_lhs(self, lhs):
-        ret_val = im.LHS()
-
-        for condition in lhs.conditions:
-            cond = self.geninst_condition(condition)
-            ret_val.add_condition(cond)
-
-        return ret_val
-
-    def geninst_condition(self, condition):
-        ret_val = im.Condition()
-
-        if condition.variable is not None:
-            ret_val.creates_variable = True
-            ret_val.variable_name = condition.variable.variable
-
-        ret_val.evaluations_ch = self.geninst_evaluations(condition.evaluations)
-        return ret_val
-
-    def geninst_evaluations(self, evaluations):
-
-        # obrada prve stavke
-        eval_ch = self.process_eval_choice(evaluations.firstEvaluationChoice)
-        eval_ch.is_first = True
-        ret_val = [eval_ch]
-
-        # obrada narednih
-        for subsequentEC in evaluations.subsequentEC:
-            eval_ch = self.process_eval_choice(subsequentEC.evaluationChoice)
-            eval_ch.is_first = False
-            eval_ch.logical_operator = subsequentEC.logOperator
-            ret_val.append(eval_ch)
-
-        return ret_val
-
-    def process_eval_choice(self, eval_choice):
-
-        ret_val = None
-
-        if eval_choice.__class__.__name__ == "Evaluation":
-
-            ret_val = im.Evaluation()
-
-            if eval_choice.operand.__class__.__name__ == "Field":
-                ret_val.operand_type = enums.OperandType.FIELD
-                ret_val.operand = eval_choice.operand.field
-
-            elif eval_choice.operand.__class__.__name__ == "Variable":
-                ret_val.operand_type = enums.OperandType.GLOBAL
-                ret_val.operand = eval_choice.operand.variable
-
+    def evaluateLHS(self, im_model):
+        lhs_evaluation = None
+        for condition in im_model.instructions.conditions:
+            result = self.evaluate_condition(condition)
+            if lhs_evaluation:
+                lhs_evaluation = lhs_evaluation and result
             else:
-                ret_val.operand_type = enums.OperandType.LITERAL
-                ret_val.operand = eval_choice.operand
+                lhs_evaluation = result
+        return lhs_evaluation
 
-            ret_val.continuations_ch = self.geninst_continuations(eval_choice.continuations)
+    def evaluate_condition(self, condition):
+        condition_evaluation = None
+        fact  = None
+        for key, value in self.facts.items():
+            if key == condition.class_name:
+                fact = value
+                break
 
+        for eval_ch in  condition.evaluations_ch:
+            result, operator = self.evaluate_eval_ch(eval_ch, fact)
+            if operator == -1:
+                condition_evaluation = result
+            elif operator == ',':
+                    condition_evaluation = condition_evaluation and result
+            else:
+                condition_evaluation = eval('condition_evaluation'+operator+'result')
+        return condition_evaluation
+
+    def evaluate_eval_ch(self, choice, fact):
+        final_result = None
+        if choice.__class__.__name__ == 'Evaluation':
+            if choice.operand_type.name == 'FIELD':  # ako je prvi operand evaluacije field zamijeni ga sa fact.naziv_polja
+                operand = 'fact.'+choice.operand
+            else:
+                operand = str(choice.operand)            # u suprotnom proslijedi kao string
+            for cont_ch in choice.continuations_ch:
+                result, operator = self.evaluate_cont_ch(cont_ch, fact, operand)
+                if operator == -1:
+                    final_result = result
+                elif operator == ',':
+                    final_result = final_result and result
+                else:
+                    final_result = eval('final_result '+operator+' result')
         else:
+            for eval_ch in choice.evaluations_ch:
+                result, operator = self.evaluate_eval_ch(eval_ch, fact)
+                if operator == -1:
+                    final_result = result
+                elif operator == ',':
+                    final_result = final_result and result
+                else:
+                    final_result = eval('final_result '+ operator+' result')
+                if choice.negated:
+                    final_result = not final_result
+        return final_result, choice.logical_operator
 
-            ret_val = im.EvaluationGrouped()
-            ret_val.negated = eval_choice.negation
-            ret_val.evaluations_ch = self.geninst_evaluations(eval_choice.evaluations)
 
-        return ret_val
-
-    def geninst_continuations(self, continuations):
-
-        cont_ch = self.process_cont_choice(continuations.firstContinuationChoice)
-        cont_ch.is_first = True
-        ret_val = [cont_ch]
-
-        for subsequentCC in continuations.subsequentCC:
-            cont_ch = self.process_cont_choice(subsequentCC.continuationChoice)
-            cont_ch.is_first = False
-            cont_ch.logical_operator = subsequentCC.logOperator
-            ret_val.append(cont_ch)
-
-        return ret_val
-
-    def process_cont_choice(self, cont_choice):
-
-        ret_val = None
-
-        if cont_choice.__class__.__name__ == "Continuation":
-            ret_val = im.Continuation()
-
-            if cont_choice.relOperator == "<":
-                ret_val.relational_operator = enums.RelOperator.LT
-            elif cont_choice.relOperator == ">":
-                ret_val.relational_operator = enums.RelOperator.GT
-            elif cont_choice.relOperator == "<=":
-                ret_val.relational_operator = enums.RelOperator.LE
-            elif cont_choice.relOperator == ">=":
-                ret_val.relational_operator = enums.RelOperator.GE
-            elif cont_choice.relOperator == "==":
-                ret_val.relational_operator = enums.RelOperator.EQ
-            elif cont_choice.relOperator == "!=":
-                ret_val.relational_operator = enums.RelOperator.NE
-            elif cont_choice.relOperator == "contains":
-                ret_val.relational_operator = enums.RelOperator.CO
+    def evaluate_cont_ch(self, choice, fact, operand):
+        final_result = None
+        if choice.__class__.__name__ == 'Continuation':
+            if choice.operand_type.name == 'FIELD': # isto kao gore samo se sad primjenjuje za drugi relacioni operand
+                operand2 = 'fact.'+choice.operand
             else:
-                print("ERROR")
+                operand2 = str(choice.operand)
+            eval_string = operand+" "+choice.relational_operator+" "+str(operand2)
+            final_result = eval(eval_string)
+            return final_result, choice.logical_operator
 
-            if cont_choice.operand.__class__.__name__ == "Field":
-                ret_val.operand_type = enums.OperandType.FIELD
-                ret_val.operand = cont_choice.operand.field
+        else:       # ContinuationGrouped
+            for cont_ch in choice.continuations_ch:
+                result, operator = self.evaluate_cont_ch(cont_ch, fact, operand)
+                if operator == -1:
+                    final_result = result
+                elif operator == ',':
+                    final_result = final_result and result
+                else:
+                    final_result = eval('final_result ' +operator+' result')
 
-            elif cont_choice.operand.__class__.__name__ == "Variable":
-                ret_val.operand_type = enums.OperandType.GLOBAL
-                ret_val.operand = cont_choice.operand.variable
+            if choice.negated:
+                final_result = not final_result
 
-            else:
-                ret_val.operand_type = enums.OperandType.LITERAL
-                ret_val.operand = cont_choice.operand
-
-        else:
-            ret_val = im.ContinuationGrouped()
-            ret_val.negated = cont_choice.negation
-            ret_val.continuations_ch = self.geninst_continuations(cont_choice.continuations)
-
-        return ret_val
+        return final_result, choice.logical_operator

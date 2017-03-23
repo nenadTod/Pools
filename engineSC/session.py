@@ -3,6 +3,8 @@ import os
 
 import itertools as it
 from engineSC.executable_rule import ExecutableRule
+from engineSC.im_builder import IM_Builder
+from engineSC.checker import Checker
 
 
 class Session:
@@ -90,9 +92,11 @@ class Session:
 
     def run_rule(self, exec_rule):
         combinations = self.cartesian_product(exec_rule.fact_classes)
-
+        # im = IM_Builder(exec_rule.rule.lhs)
         for combination in combinations:
             #proslediti globalne varijable?
+            # checker = Checker(combination, self.globals)
+            # if checker.evaluateLHS(im):
             if exec_rule.evaluate(combination):
                 print("execute")
                 # TODO: return true ili false u zavisnosti od toga da li je bilo promena
@@ -100,6 +104,8 @@ class Session:
                 # ako nije no loop i ima promena - prekidaj odmah i vracaj true
                 # ako je no loop i ima promena - ne prekidaj
                 # ako nema promena - ne prekidaj
+            else:
+                print("checker false")
 
         # returns false if no rule was excecuted
         return False

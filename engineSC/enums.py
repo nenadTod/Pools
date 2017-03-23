@@ -20,3 +20,4 @@ class OperandType(Enum):
     GLOBAL = 1
     FIELD = 2
     LITERAL = 3
+    STRING = 4
