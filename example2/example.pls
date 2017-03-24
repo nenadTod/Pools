@@ -28,5 +28,4 @@ rule "accLeast"
       $account : Account( balance > 100)
     then
       print ($account.balance)
-      $someonesAccount.deposit(350.0)
 end

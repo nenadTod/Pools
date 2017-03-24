@@ -3,7 +3,7 @@ from os.path import join, dirname
 
 from engineSC.im_builder import IM_Builder
 from engineSC.session import Session
-from example2.account import Account
+from example2.account import Account, Monitor
 from example2.customer import Customer
 
 from textx.metamodel import metamodel_from_file
@@ -37,6 +37,11 @@ cus1.set_account(acc1)
 cus2.set_account(acc2)
 cus3.set_account(acc3)
 
+#testiranje da li monitor radi
+monitor = Monitor()
+print(monitor.is_changed(acc1))
+acc1.withdraw(200.0)
+print(monitor.is_changed(acc1))
 
 session = Session()
 session.add_fact(cus1)

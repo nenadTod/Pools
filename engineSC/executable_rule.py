@@ -1,4 +1,4 @@
-from example2.account import Account
+from example2.account import Account, Monitor
 from example2.customer import Customer
 import copy, itertools
 
@@ -28,11 +28,12 @@ class ExecutableRule:
             self.fact_classes.append(condition.factClass)
 
     def execute(self, globals, locals):
+        monitor = Monitor()
         rule_code = ExecutableRuleCode(self.rule.rhs, globals, locals)
-        rule_code.preprocess_code()
-        rule_code.execute_code()
-        changed = rule_code.postprocess()
-
+        rule_code.process_variables()
+        rule_code.preprocess_code(monitor)
+        changed = rule_code.execute_code(monitor)
+        print('Da li je doslo do promjene: ' + str(changed))
         return changed
 
 
@@ -46,15 +47,14 @@ class ExecutableRuleCode:
         self.globals = globals
         self.locals = locals
         self.process_variables()
-
         self.locals_copy = copy.deepcopy(locals)
 
     def process_variables(self):
         for key in self.locals.keys() & self.globals.keys():
             del self.globals[key]
 
-    def preprocess_code(self):
-
+    def preprocess_code(self, monitor):
+        print(self.raw_code)
         for key, value in self.locals.items():
             self.raw_code = self.raw_code.replace(key, "self.locals[\"" + key + "\"]")
 
@@ -65,29 +65,15 @@ class ExecutableRuleCode:
         while "\r\n " in self.raw_code:
             self.raw_code = self.raw_code.replace("\r\n ", "\r\n")
 
-        # TODO: vratiti true/false u zavisnosti od promena factova ( u sustini, ako se promenilo nesto u locals)
+        for value in self.locals.values():
+            monitor.is_changed(value)
 
-    def execute_code(self):
+    def execute_code(self, monitor):
         exec(self.raw_code)
-
-    def postprocess(self):
-        #za sad
-        return False
-
-        #for key, value in self.locals_old.items():
-            #print('local_old', ' :', key, ' - ', value)
-        #for key, value in self.globals_old.items():
-            #print('global_old', ' :', key, ' - ', value)
-        #const1 = len(self.locals)
-        #print(const1)
-        isti = set(self.all.items()) & set(self.locals_old.items())
-        #const2 = len(isti)
-        #print(const2)
-        #print('koliko ih je istih nasao ',len(isti))
-
-        if self.all == self.locals_old:
-            print("Nije doslo do promjene.")
-            return False
-        else:
-            print('Doslo je do promjene!')
+        temp = []
+        for value in self.locals.values():
+            temp.append(monitor.is_changed(value))
+        if temp.count(True) > 0:
             return True
+        else:
+            return False
