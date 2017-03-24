@@ -5,7 +5,7 @@ global $someonesAccount
 salience 10
 rule "studentWithLowAccountBalance"
     when
-       $account : Account( balance < 500.46 )
+       $account : Account( balance < 500.46 + 50 -20)
     then
       $account.balance = 1000
       $account.withdraw(300.0)

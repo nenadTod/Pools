@@ -51,7 +51,7 @@ class Checker:
                 try:
                     eval(operand)
                 except AttributeError:
-                    print("AttributeError: " + "Cannot access " + choice.operand + "of class " + fact.__class__.__name__)  # izmenjeno zbog hendlanja nested varijabli
+                    print("AttributeError: " + "Cannot access " + choice.operand + " of class " + fact.__class__.__name__)  # izmenjeno zbog hendlanja nested varijabli
                     return -1,-1
             elif choice.operand_type.name == 'GLOBAL':
                 operand = "self.globals['"+choice.operand+"']"

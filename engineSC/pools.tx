@@ -97,7 +97,7 @@ ContinuationGrouped:
 
 Continuation:
     relOperator=RelOperator
-    operand=RelOperand
+    operand=Expression
 ;
 
 LogOperator:
@@ -114,6 +114,20 @@ Field:
 
 RelOperand:
     BOOL | Field | Variable | NUMBER | STRING
+;
+
+Expression:
+    operand=RelOperand
+    subsequentArith*=SubsequentArith
+;
+
+SubsequentArith:
+    operator=BinaryOperator
+    operand=Expression
+;
+
+BinaryOperator:
+    '+' | '-' | '*' | '/'
 ;
 
 RHS:
