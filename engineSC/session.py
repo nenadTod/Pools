@@ -71,10 +71,6 @@ class Session:
         for global_var in self.rule_model.globals:
             self.globals[global_var.variable.variable] = None
 
-    def all_facts(self):
-        for k, v in self.facts.items():
-            print(k, v)
-
     # logika i odluke o tome koji se rule izvrsava
     def run(self):
         # if nesto se promenilo i nema no loop, repeat. else next rule

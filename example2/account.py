@@ -1,19 +1,3 @@
-from example2.customer import Customer
-from weakref import WeakKeyDictionary
-import _pickle as cPickle
-#from cPickle import dumps
-
-class Monitor():
-    def __init__(self):
-        self.objects = WeakKeyDictionary()
-    def is_changed(self, obj):
-        current_pickle = cPickle.dumps(obj, -1)
-        changed = False
-        if obj in self.objects:
-            changed = current_pickle != self.objects[obj]
-        self.objects[obj] = current_pickle
-        return changed
-
 
 class Account:
 

@@ -1,6 +1,6 @@
-from example2.account import Account, Monitor
-from example2.customer import Customer
-import copy, itertools
+from weakref import WeakKeyDictionary
+import _pickle as cPickle
+
 
 class ExecutableRule:
 
@@ -30,7 +30,6 @@ class ExecutableRule:
     def execute(self, globals, locals):
         monitor = Monitor()
         rule_code = ExecutableRuleCode(self.rule.rhs, globals, locals)
-        rule_code.process_variables()
         rule_code.preprocess_code(monitor)
         changed = rule_code.execute_code(monitor)
         print('Da li je doslo do promjene: ' + str(changed))
@@ -46,20 +45,16 @@ class ExecutableRuleCode:
         # self.all = all
         self.globals = globals
         self.locals = locals
-        self.process_variables()
-        self.locals_copy = copy.deepcopy(locals)
-
-    def process_variables(self):
-        for key in self.locals.keys() & self.globals.keys():
-            del self.globals[key]
+        # self.locals_copy = copy.deepcopy(locals)
 
     def preprocess_code(self, monitor):
-        print(self.raw_code)
+
         for key, value in self.locals.items():
             self.raw_code = self.raw_code.replace(key, "self.locals[\"" + key + "\"]")
 
         for key, value in self.globals.items():
-            self.raw_code = self.raw_code.replace(key, "self.globals[\"" + key + "\"]")
+            if key not in self.locals.keys():
+                self.raw_code = self.raw_code.replace(key, "self.globals[\"" + key + "\"]")
 
         # sredjivanje problema sa code indent zbog exec()
         while "\r\n " in self.raw_code:
@@ -69,6 +64,7 @@ class ExecutableRuleCode:
             monitor.is_changed(value)
 
     def execute_code(self, monitor):
+        print(self.raw_code)
         exec(self.raw_code)
         temp = []
         for value in self.locals.values():
@@ -77,3 +73,19 @@ class ExecutableRuleCode:
             return True
         else:
             return False
+
+
+class Monitor:
+    def __init__(self):
+        self.objects = WeakKeyDictionary()
+
+    def is_changed(self, obj):
+        current_pickle = cPickle.dumps(obj, -1)
+        changed = False
+
+        if obj in self.objects:
+            changed = current_pickle != self.objects[obj]
+
+        self.objects[obj] = current_pickle
+
+        return changed
