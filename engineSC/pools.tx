@@ -109,11 +109,11 @@ RelOperator:
 ;
 
 Field:
-    field=/[A-Za-z][A-Za-z0-9_]*/
+    field=/[A-Za-z][A-Za-z0-9_]*([.][A-Za-z][A-Za-z0-9_]*)*/
 ;
 
 RelOperand:
-    BOOL | Field  | Variable | NUMBER | STRING
+    BOOL | Field | Variable | NUMBER | STRING
 ;
 
 RHS:
