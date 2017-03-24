@@ -31,21 +31,16 @@ class ExecutableRule:
         monitor = Monitor()
         rule_code = ExecutableRuleCode(self.rule.rhs, globals, locals)
         rule_code.preprocess_code(monitor)
-        changed = rule_code.execute_code(monitor)
-        print('Da li je doslo do promjene: ' + str(changed))
-        return changed
+
+        return rule_code.execute_code(monitor)
 
 
-# dobija factove, globalne i lokalne varijable (kod je rhs, u smislu kod koji se izvrsava)
-# vraca true/false u zavisnosti od toga da li je doslo do promene factova
 class ExecutableRuleCode:
 
     def __init__(self, code, globals, locals):
         self.raw_code = code
-        # self.all = all
         self.globals = globals
         self.locals = locals
-        # self.locals_copy = copy.deepcopy(locals)
 
     def preprocess_code(self, monitor):
 

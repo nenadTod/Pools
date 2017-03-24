@@ -68,6 +68,8 @@ class Session:
         for small_rule in self.rule_model.rules:
             self.rules.append(ExecutableRule(small_rule, self))
 
+        self.rules = sorted(self.rules, key=lambda rule: rule.priority, reverse=True)
+
         for global_var in self.rule_model.globals:
             self.globals[global_var.variable.variable] = None
 
@@ -84,18 +86,13 @@ class Session:
         combinations = self.cartesian_product(exec_rule.fact_classes)
         im = IM_Builder(exec_rule.rule.lhs)
         for combination in combinations:
-            #proslediti globalne varijable?
             checker = Checker(combination, self.globals)
+            print("Checking rule " + exec_rule.rule.name)
             evaluation, variables = checker.evaluateLHS(im)
             if evaluation:
-                # TODO: srediti za no-loop
-                # ako nije no loop i ima promena - prekidaj odmah i vracaj true
-                # ako je no loop i ima promena - ne prekidaj
-                # ako nema promena - ne prekidaj
-                exec_rule.execute(self.globals, variables)
-                print(True, variables)
-            else:
-                print(False)
+                print("Executing rule " + exec_rule.rule.name)
+                changes = exec_rule.execute(self.globals, variables)
+                if changes and not exec_rule.no_loop:
+                    return True
 
-        # returns false if no rule was excecuted
         return False
