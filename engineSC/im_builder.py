@@ -51,23 +51,7 @@ class IM_Builder:
         if eval_choice.__class__.__name__ == "Evaluation":
 
             ret_val = im.Evaluation()
-
-            if eval_choice.operand.__class__.__name__ == "Field":
-                ret_val.operand_type = enums.OperandType.FIELD
-                ret_val.operand = eval_choice.operand.field
-
-            elif eval_choice.operand.__class__.__name__ == "Variable":
-                ret_val.operand_type = enums.OperandType.GLOBAL
-                ret_val.operand = eval_choice.operand.variable
-
-            elif eval_choice.operand.__class__.__name__ == "str":
-                ret_val.operand_type = enums.OperandType.STRING
-                ret_val.operand = "'"+eval_choice.operand+"'"
-
-            else:
-                ret_val.operand_type = enums.OperandType.LITERAL
-                ret_val.operand = str(eval_choice.operand)
-
+            ret_val.operand = eval_choice.operand
             ret_val.continuations_ch = self.geninst_continuations(eval_choice.continuations)
 
         else:
@@ -99,42 +83,7 @@ class IM_Builder:
         if cont_choice.__class__.__name__ == "Continuation":
             ret_val = im.Continuation()
             ret_val.relational_operator = cont_choice.relOperator
-
-            """
-            if cont_choice.relOperator == "<":
-                ret_val.relational_operator = enums.RelOperator.LT
-            elif cont_choice.relOperator == ">":
-                ret_val.relational_operator = enums.RelOperator.GT
-            elif cont_choice.relOperator == "<=":
-                ret_val.relational_operator = enums.RelOperator.LE
-            elif cont_choice.relOperator == ">=":
-                ret_val.relational_operator = enums.RelOperator.GE
-            elif cont_choice.relOperator == "==":
-                ret_val.relational_operator = enums.RelOperator.EQ
-            elif cont_choice.relOperator == "!=":
-                ret_val.relational_operator = enums.RelOperator.NE
-            elif cont_choice.relOperator == "contains":
-                ret_val.relational_operator = enums.RelOperator.CO
-            else:
-                print("ERROR")
-            """
-
-            if cont_choice.operand.__class__.__name__ == "Field":
-                ret_val.operand_type = enums.OperandType.FIELD
-                ret_val.operand = cont_choice.operand.field
-
-            elif cont_choice.operand.__class__.__name__ == "Variable":
-                ret_val.operand_type = enums.OperandType.GLOBAL
-                ret_val.operand = cont_choice.operand.variable
-
-            elif cont_choice.operand.__class__.__name__ == "str":
-                ret_val.operand_type = enums.OperandType.STRING
-                ret_val.operand = "'"+cont_choice.operand+"'"
-
-            else:
-                ret_val.operand_type = enums.OperandType.LITERAL
-                ret_val.operand = cont_choice.operand
-
+            ret_val.operand = cont_choice.operand
         else:
             ret_val = im.ContinuationGrouped()
             ret_val.negated = cont_choice.negation

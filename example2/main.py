@@ -1,6 +1,7 @@
 import json
 from os.path import join, dirname
 
+from engineSC.executable_rule import Monitor
 from engineSC.im_builder import IM_Builder
 from engineSC.session import Session
 from example2.account import Account
@@ -49,6 +50,7 @@ session.add_fact(acc3)
 
 session.remove_fact(acc2)
 
+
 # ideja: sta ako umjesto da prosledjujemo objekte, samo prosledimo imena objekata, jer nam samo to i treba da bi ih pokrenuli?
 # ideja rejected
 
@@ -65,6 +67,6 @@ res = session.find_facts_by_class("Account")
 
 session.run()
 
-
+print("ended")
 
 #dot -Tpng example.pls.dot -o model.png

@@ -1,6 +1,6 @@
-from example2.account import Account
-from example2.customer import Customer
-import copy, itertools
+from weakref import WeakKeyDictionary
+import _pickle as cPickle
+
 
 class ExecutableRule:
 
@@ -28,66 +28,59 @@ class ExecutableRule:
             self.fact_classes.append(condition.factClass)
 
     def execute(self, globals, locals):
+        monitor = Monitor()
         rule_code = ExecutableRuleCode(self.rule.rhs, globals, locals)
-        rule_code.preprocess_code()
-        rule_code.execute_code()
-        changed = rule_code.postprocess()
+        rule_code.preprocess_code(monitor)
 
-        return changed
+        return rule_code.execute_code(monitor)
 
 
-# dobija factove, globalne i lokalne varijable (kod je rhs, u smislu kod koji se izvrsava)
-# vraca true/false u zavisnosti od toga da li je doslo do promene factova
 class ExecutableRuleCode:
 
     def __init__(self, code, globals, locals):
         self.raw_code = code
-        # self.all = all
         self.globals = globals
         self.locals = locals
-        self.process_variables()
 
-        self.locals_copy = copy.deepcopy(locals)
-
-    def process_variables(self):
-        for key in self.locals.keys() & self.globals.keys():
-            del self.globals[key]
-
-    def preprocess_code(self):
+    def preprocess_code(self, monitor):
 
         for key, value in self.locals.items():
             self.raw_code = self.raw_code.replace(key, "self.locals[\"" + key + "\"]")
 
         for key, value in self.globals.items():
-            self.raw_code = self.raw_code.replace(key, "self.globals[\"" + key + "\"]")
+            if key not in self.locals.keys():
+                self.raw_code = self.raw_code.replace(key, "self.globals[\"" + key + "\"]")
 
         # sredjivanje problema sa code indent zbog exec()
         while "\r\n " in self.raw_code:
             self.raw_code = self.raw_code.replace("\r\n ", "\r\n")
 
-        # TODO: vratiti true/false u zavisnosti od promena factova ( u sustini, ako se promenilo nesto u locals)
+        for value in self.locals.values():
+            monitor.is_changed(value)
 
-    def execute_code(self):
+    def execute_code(self, monitor):
+        print(self.raw_code)
         exec(self.raw_code)
-
-    def postprocess(self):
-        #za sad
-        return False
-
-        #for key, value in self.locals_old.items():
-            #print('local_old', ' :', key, ' - ', value)
-        #for key, value in self.globals_old.items():
-            #print('global_old', ' :', key, ' - ', value)
-        #const1 = len(self.locals)
-        #print(const1)
-        isti = set(self.all.items()) & set(self.locals_old.items())
-        #const2 = len(isti)
-        #print(const2)
-        #print('koliko ih je istih nasao ',len(isti))
-
-        if self.all == self.locals_old:
-            print("Nije doslo do promjene.")
-            return False
-        else:
-            print('Doslo je do promjene!')
+        temp = []
+        for value in self.locals.values():
+            temp.append(monitor.is_changed(value))
+        if temp.count(True) > 0:
             return True
+        else:
+            return False
+
+
+class Monitor:
+    def __init__(self):
+        self.objects = WeakKeyDictionary()
+
+    def is_changed(self, obj):
+        current_pickle = cPickle.dumps(obj, -1)
+        changed = False
+
+        if obj in self.objects:
+            changed = current_pickle != self.objects[obj]
+
+        self.objects[obj] = current_pickle
+
+        return changed
