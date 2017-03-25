@@ -59,8 +59,9 @@ class ExecutableRuleCode:
             monitor.is_changed(value)
 
     def execute_code(self, monitor):
-        print(self.raw_code)
+        print(self.raw_code[:-1])  # odsjecen je newline sa kraja stringa radi ljepseg ispisa
         exec(self.raw_code)
+        print("\n")
         temp = []
         for value in self.locals.values():
             temp.append(monitor.is_changed(value))

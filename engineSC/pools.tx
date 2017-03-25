@@ -41,7 +41,7 @@ Condition:
 ;
 
 Variable:
-    variable=/\$[A-Za-z][A-Za-z0-9_]*/
+    variable=/\$[A-Za-z][A-Za-z0-9_]*([.][A-Za-z][A-Za-z0-9_]*)*/
 ;
 
 FactClass:

@@ -94,5 +94,7 @@ class Session:
                 changes = exec_rule.execute(self.globals, variables)
                 if changes and not exec_rule.no_loop:
                     return True
+            else:
+                print("Rule evaluation returned False\n")
 
         return False
